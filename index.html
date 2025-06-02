@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KI bei Alzheimer & Demenz mit BCI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Chosen Palette: Calm Harmony - Warm Neutrals (bg-stone-100, bg-white, bg-stone-50), Soft Teal/Blue Accent (teal-700, teal-600, teal-500) */
+        /* Application Structure Plan: Single scrolling page with a sticky top navigation. Each "slide" from the presentation outline is a distinct section on the page, allowing for clear thematic grouping. The navigation links facilitate quick jumps between these sections, providing a non-linear exploration path suitable for a presentation. Accordion elements are used for detailed lists (e.g., data types, ethical challenges) to maintain a clean layout and prevent information overload, enhancing user understanding by allowing them to expand details at will. */
+        /* Visualization & Content Choices:
+            - Content is primarily textual and list-based, as in the source presentation outline.
+            - No complex quantitative data points were identified in the provided text that would necessitate Chart.js or Plotly.js for effective consumption beyond clear textual presentation.
+            - Interactive elements focus on navigation (sticky nav, smooth scroll) and information reveal (accordions) to manage content density and encourage exploration.
+            - All content from the combined source is integrated directly into the HTML structure.
+            - CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. */
+        /* CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. */
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .sticky-nav {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        .content-section {
+            padding-top: 80px;
+            margin-top: -80px;
+        }
+        .card {
+            transition: all 0.3s ease-in-out;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+        }
+        .accordion-content.open {
+            max-height: 2000px;
+            transition: max-height 0.5s ease-in;
+        }
+        .nav-link {
+            transition: color 0.3s ease;
+        }
+        .nav-link:hover {
+            color: #0D9488;
+        }
+        .active-nav-link {
+            color: #0D9488;
+            font-weight: 600;
+            border-bottom: 2px solid #0D9488;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-stone-100 text-stone-800">
+
+    <nav class="sticky-nav bg-white/80 shadow-md">
+        <div class="container mx-auto px-6 py-3">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <h1 class="text-xl font-bold text-teal-700">KI bei Alzheimer & Demenz</h1>
+                <div class="flex flex-wrap justify-center space-x-4 mt-2 md:mt-0" id="nav-links">
+                    <a href="#problemstellung" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-stone-700">Problemstellung</a>
+                    <a href="#medizinische-fortschritte" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-stone-700">Med. Fortschritte</a>
+                    <a href="#daten-bci" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-stone-700">Daten & BCI</a>
+                    <a href="#ethik" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-stone-700">Ethik & Datenschutz</a>
+                    <a href="#ki-entwicklung" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-stone-700">KI-Entwicklung</a>
+                    <a href="#weiterentwicklung" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-stone-700">Zukunft & Fazit</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-6 py-8">
+
+        <section id="titelblatt" class="content-section mb-16 text-center">
+            <div class="bg-white p-8 rounded-xl shadow-lg">
+                <h2 class="text-4xl font-bold text-teal-700 mb-4">KI im Kampf gegen Alzheimer & Demenz:</h2>
+                <h3 class="text-3xl font-semibold text-teal-600 mb-6">Die Rolle von Gehirn-Computer-Schnittstellen (BCI) und Neuralink</h3>
+                <p class="text-xl text-stone-700 mb-2">Chancen, Herausforderungen und der Weg in die Zukunft der kognitiven Unterstützung</p>
+                <p class="text-lg text-stone-600 mt-8">Referent: Team 2</p>
+                <p class="text-md text-stone-500">Datum: 30. Mai 2025</p>
+            </div>
+        </section>
+
+        <section id="problemstellung" class="content-section mb-16">
+            <div class="bg-white p-8 rounded-xl shadow-lg">
+                <h2 class="text-3xl font-bold text-teal-700 mb-4">Einleitung – Die globale Herausforderung</h2>
+                <p class="text-lg mb-4 text-stone-700">
+                    Demenzerkrankungen, allen voran die Alzheimer-Krankheit, gehören zu den größten gesundheitlichen Herausforderungen unserer alternden Weltbevölkerung. Dieses Segment beleuchtet die aktuelle Situation und die prognostizierte Entwicklung.
+                </p>
+                <h3 class="text-2xl font-semibold text-teal-600 mb-3">Aktuelle Zahlen (2021) & Prognosen:</h3>
+                <ul class="list-disc list-inside space-y-2 mb-6 text-stone-700">
+                    <li>Bereits heute leben weltweit <strong>über 55 Millionen</strong> Menschen mit Demenz.</li>
+                    <li>Jährlich kommen etwa <strong>10 Millionen</strong> Neuerkrankungen hinzu.</li>
+                    <li>Alzheimer ist die häufigste Einzelursache von Demenz und macht rund <strong>60-70%</strong> aller Fälle aus.</li>
+                    <li><strong>Prognose bis 2050:</strong> Es wird mit einer Zunahme auf rund <strong>139 Millionen</strong> Demenzkranke gerechnet (ca. Verdreifachung). Besonders starker Anstieg (ca. 250% vs. ~150% weltweit) wird in Nordafrika und Subsahara-Afrika erwartet.</li>
+                </ul>
+                <h3 class="text-2xl font-semibold text-teal-600 mb-3">Krankheitslast & Wirtschaftliche Belastung:</h3>
+                <ul class="list-disc list-inside space-y-2 text-stone-700">
+                    <li>Schon heute zählt Demenz global zu den <strong>Top 7 Todesursachen</strong> und ist ein Hauptgrund für Pflegebedürftigkeit im Alter.</li>
+                    <li>Die weltweiten Kosten für Demenz beliefen sich 2019 auf rund <strong>1,3 Billionen US-Dollar</strong>. Diese Summe umfasst direkte medizinische Kosten, soziale Betreuungsangebote sowie den "informellen" Wert der unbezahlten Pflege durch Angehörige. Prognostiziert auf <strong>1,7 bis 2,8 Billionen US-Dollar</strong> bis 2030.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="problemstellung-bci" class="content-section mb-16">
+            <div class="bg-white p-8 rounded-xl shadow-lg">
+                <h2 class="text-3xl font-bold text-teal-700 mb-4">Problemstellung: Kognitiver Verfall & der Bedarf an BCI</h2>
+                <p class="text-lg mb-6 text-stone-700">
+                    Die primäre Problemstellung, die eine fortgeschrittene Gehirn-Computer-Schnittstelle (BCI) wie Neuralink bei Alzheimer und Demenz adressieren könnte, ist die progressive Verschlechterung der kognitiven Funktionen und die daraus resultierende Einschränkung der Selbstständigkeit und Lebensqualität der Betroffenen.
+                </p>
+                <h3 class="text-2xl font-semibold text-teal-600 mb-3">Spezifische Aspekte des kognitiven Verfalls:</h3>
+                <ul class="list-disc list-inside space-y-2 mb-6 text-stone-700">
+                    <li><strong>Gedächtnisverlust:</strong> Verlust des Kurz- und Langzeitgedächtnisses, beeinträchtigt die Alltagsbewältigung.</li>
+                    <li><strong>Kognitive Defizite:</strong> Schwierigkeiten bei Problemlösung, Entscheidungsfindung, Orientierung und der Ausführung komplexer Aufgaben.</li>
+                    <li><strong>Verlust der Kommunikationsfähigkeit:</strong> Erhebliche Sprach- und Kommunikationsschwierigkeiten im fortgeschrittenen Stadium.</li>
+                    <li><strong>Verlust der Selbstständigkeit:</strong> Patienten werden zunehmend pflegebedürftig und verlieren die Fähigkeit, eigenständig zu leben.</li>
+                    <li><strong>Emotionale & Verhaltensstörungen:</strong> Depressionen, Angstzustände, Aggressionen und Apathie sind häufige Begleiterscheinungen.</li>
+                </ul>
+                <h3 class="text-2xl font-semibold text-teal-600 mb-3">Ziel der BCI-Anwendung (Neuralink-Konzept):</h3>
+                <p class="text-stone-700">
+                    Die BCI soll durch direkte neuronale Intervention oder Assistenz die kognitiven Funktionen stabilisieren, wiederherstellen oder kompensieren, um Patienten eine höhere Lebensqualität und längere Selbstständigkeit zu ermöglichen. Dies könnte die Modulation neuronaler Netzwerke oder die Schaffung einer Schnittstelle zur Unterstützung kognitiver Prozesse (z.B. Gedächtnisstützen) bedeuten.
+                </p>
+            </div>
+        </section>
+
+        <section id="medizinische-fortschritte" class="content-section mb-16">
+            <div class="bg-white p-8 rounded-xl shadow-lg">
+                <h2 class="text-3xl font-bold text-teal-700 mb-4">Medizinische Fortschritte & Grenzen – Therapien & Prävention</h2>
+                <p class="text-lg mb-4 text-stone-700">
+                    Die medizinische Forschung erzielt Fortschritte bei der Behandlung und Prävention von Alzheimer, doch es bleiben Herausforderungen.
+                </p>
+                <h3 class="text-2xl font-semibold text-teal-600 mb-3">Neue Therapien – Ein Hoffnungsschimmer:</h3>
+                <ul class="list-disc list-inside space-y-2 mb-6 text-stone-700">
+                    <li>Erstmals Hoffnung auf <strong>krankheitsmodifizierende Behandlungen</strong>, die direkt auf die Alzheimer-Pathologie (Beta-Amyloid-Plaques) abzielen.</li>
+                    <li><strong>Aducanumab</strong> (2021, USA) war die erste zugelassene medikamentöse Therapie.</li>
+                    <li><strong>Lecanemab</strong> (Legembi, 2023) reduzierte in Studien Amyloid-Ablagerungen und verlangsamte den kognitiven Abbau bei frühem Alzheimer moderat um rund <strong>27% über 18 Monate</strong>.</li>
+                    <li>Weitere Wirkstoffe (z.B. Antikörper gegen Tau-Proteine, entzündungshemmende Ansätze) sind in Entwicklung.</li>
+                </ul>
+                <h3 class="text-2xl font-semibold text-teal-600 mb-3">Risiken und Grenzen der Therapien:</h3>
+                <ul class="list-disc list-inside space-y-2 mb-6 text-stone-700">
+                    <li>Bislang keine Heilung in Sicht; begrenzter Nutzen und Nebenwirkungen (sogenannte ARIA-Effekte: Hirnödeme, Mikroblutungen).</li>
+                    <li>Extrem kostspielig (Lecanemab ca. <strong>26.500 US$/Jahr</strong> in den USA).</li>
+                    <li>Risiko globaler Ungleichheit im Zugang und Überlastung der Diagnostik ("Diagnose-Tsunami").</li>
+                </ul>
+                <h3 class="text-2xl font-semibold text-teal-600 mb-3">Prävention & Risikofaktoren:</h3>
+                <ul class="list-disc list-inside space-y-2 text-stone-700">
+                    <li>Ein erheblicher Teil der Demenzfälle (<strong>40-45%</strong>) könnte durch vorbeugende Maßnahmen hinausgezögert oder sogar verhindert werden.</li>
+                    <li>Die Lancet-Kommission 2020/2024 identifizierte <strong>12-14 modifizierbare Risikofaktoren</strong> (z.B. niedrige Bildung, Hörverlust, Bluthochdruck, Diabetes, soziale Isolation, Rauchen, Luftverschmutzung).</li>
+                    <li>Chancen durch multimodale Lebensstil-Interventionen (<strong>FINGER-Studie</strong>, Finnland).</li>
+                    <li>Herausforderungen in der Prävention: Viele Risikofaktoren hängen mit gesellschaftlichen Bedingungen zusammen; Risiko unzureichender Umsetzung in Entwicklungs- und Schwellenländern.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="frueherkennung-ki" class="content-section mb-16">
+            <div class="bg-white p-8 rounded-xl shadow-lg">
+                <h2 class="text-3xl font-bold text-teal-700 mb-4">Medizinische Fortschritte – Früherkennung & KI-Diagnostik</h2>
+                <p class="text-lg mb-4 text-stone-700">
+                    Fortschritte in der Diagnostik eröffnen neue Chancen, Demenz deutlich früher und leichter festzustellen, insbesondere durch den Einsatz von KI.
+                </p>
+                <h3 class="text-2xl font-semibold text-teal-600 mb-3">Früherkennung & Diagnostik – Neue Chancen:</h3>
+                <ul class="list-disc list-inside space-y-2 mb-6 text-stone-700">
+                    <li><strong>Bluttests:</strong> Ein Meilenstein ist die Entwicklung von Biomarker-Bluttests. Im Mai 2025 wurde ein Bluttest (Lumipulse G pTau/Aß42) von der US-Gesundheitsbehörde FDA zugelassen, der Alzheimer-typische Proteine im Plasma misst und Amyloid-Plaques im Gehirn mit hoher Wahrscheinlichkeit erkennt, ohne kostspielige PET-Scans oder invasive Lumbalpunktionen.</li>
+                    <li><strong>Bildgebende Verfahren:</strong> PET-Tracer für Amyloid und Tau sowie neue MRT-Sequenzen ermöglichen eine immer frühere und spezifischere Diagnose.</li>
+                    <li>Verbesserte neuropsychologische Tests erfassen beginnende kognitive Störungen sensitiver.</li>
+                </ul>
+                <h3 class="text-2xl font-semibold text-teal-600 mb-3">Innovationen durch KI-gestützte Diagnostik:</h3>
+                <ul class="list-disc list-inside space-y-2 mb-6 text-stone-700">
+                    <li>KI wird zu einem vielversprechenden Werkzeug in der Früherkennung von Demenz.</li>
+                    <li><strong>Sprachmusteranalyse:</strong> KI-Algorithmen erkennen subtile Anzeichen von kognitivem Abbau in Alltagsdaten. Eine Studie zeigte hohe Genauigkeit bei der Unterscheidung von gesunden und kognitiv beeinträchtigten Personen anhand kurzer Sprachanalysen.</li>
+                    <li><strong>Gehirnscan-Analyse:</strong> KI wird eingesetzt, um Muster in Gehirnscans zu detektieren, die für Alzheimer typisch sind, teils Jahre vor der klinischen Diagnose.</li>
+                    <li><strong>Vorteile der KI-Diagnostik:</strong> Schneller, objektiver und flächendeckender, wichtig bei begrenzter Zahl von Fachärzten.</li>
+                </ul>
+                <h3 class="text-2xl font-semibold text-teal-600 mb-3">Risiken in der Diagnostik:</h3>
+                <ul class="list-disc list-inside space-y-2 text-stone-700">
+                    <li>Frühe Diagnose kann psychisch belastend sein, solange keine heilende Therapie verfügbar ist.</li>
+                    <li>Gefahr einer Überlastung der Gesundheitsversorgung durch einen "Diagnose-Tsunami".</li>
+                    <li>Mangel an Fachärzten und Demenzambulanzen, insbesondere in ländlichen und ärmeren Regionen.</li>
+                    <li>Genauigkeit neuer Tests: Risiko von falsch-positiven oder falsch-negativen Befunden.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="daten-bci" class="content-section mb-16">
+            <h2 class="text-3xl font-bold text-teal-700 mb-8 text-center">Daten als Fundament für KI & BCI</h2>
+            <div class="bg-white p-8 rounded-xl shadow-lg mb-8">
+                <h3 class="text-2xl font-semibold text-teal-600 mb-4">Benötigte Datentypen für die KI-Entwicklung</h3>
+                <p class="text-stone-700 mb-6">Für die Entwicklung einer KI-Anwendung mittels Neuralink zur Unterstützung bei Alzheimer und Demenz sind hochspezifische und multimodale Daten unerlässlich.</p>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="card bg-stone-50 p-6 rounded-lg border border-stone-200">
+                        <h4 class="text-xl font-semibold text-teal-700 mb-2">1. Neuronale Aktivitätsdaten (direkt vom Gehirn)</h4>
+                        <ul class="list-disc list-inside space-y-1 text-sm text-stone-600">
+                            <li><strong>EEG/MEG-Daten:</strong> Messungen der elektrischen/magnetischen Aktivität des Gehirns zur Identifizierung von Mustern, die mit kognitiven Zuständen, Gedächtnisabruf oder pathologischen Hirnwellen (z.B. verlangsamte Rhythmen) assoziiert sind. <em>Neuralink wäre hier der primäre Sensor für diese Daten in hochauflösender Form.</em></li>
+                            <li><strong>Spike-Daten (von einzelnen Neuronen oder Neuronengruppen):</strong> Mikroelektroden, wie sie Neuralink implantiert, können die Aktivität einzelner Neuronen aufzeichnen. Diese Daten sind entscheidend, um präzise neuronale Korrelate von Gedächtnisprozessen oder kognitiven Defiziten zu identifizieren.</li>
+                            <li><strong>LFP (Local Field Potentials):</strong> Messungen der Aktivität größerer Neuronengruppen, die Informationen über den Zustand lokaler Netzwerke liefern.</li>
+                        </ul>
+                        <p class="text-xs text-stone-500 mt-2"><strong>Wichtigkeit:</strong> Kern-Input für BCI, Identifikation pathologischer Muster, Dekodierung kognitiver Zustände, Steuerung von Interventionen.</p>
+                    </div>
+
+                    <div class="card bg-stone-50 p-6 rounded-lg border border-stone-200">
+                        <h4 class="text-xl font-semibold text-teal-700 mb-2">2. Bildgebende Daten des Gehirns</h4>
+                        <ul class="list-disc list-inside space-y-1 text-sm text-stone-600">
+                            <li><strong>MRT (strukturell, DTI):</strong> Hirnvolumen (Atrophie), neuronale Verbindungen.</li>
+                            <li><strong>fMRT:</strong> Hirnaktivität bei kognitiven Aufgaben, gestörte Netzwerke.</li>
+                            <li><strong>PET (Amyloid-, Tau-, FDG-PET):</strong> Diagnose, Stadieneinteilung, Stoffwechsel.</li>
+                        </ul>
+                        <p class="text-xs text-stone-500 mt-2"><strong>Wichtigkeit:</strong> Diagnose, Prognose, Verfolgung der Krankheitsprogression.</p>
+                    </div>
+
+                    <div class="card bg-stone-50 p-6 rounded-lg border border-stone-200">
+                        <h4 class="text-xl font-semibold text-teal-700 mb-2">3. Kognitive Testdaten</h4>
+                        <ul class="list-disc list-inside space-y-1 text-sm text-stone-600">
+                            <li>Ergebnisse neuropsychologischer Tests (MMSE, MoCA) zur Quantifizierung kognitiver Domänen.</li>
+                        </ul>
+                        <p class="text-xs text-stone-500 mt-2"><strong>Wichtigkeit:</strong> "Ground Truth" für Training, Verknüpfung neuronaler Muster mit Leistungen, Evaluation des Therapieerfolgs.</p>
+                    </div>
+                    
+                    <div class="card bg-stone-50 p-6 rounded-lg border border-stone-200">
+                        <h4 class="text-xl font-semibold text-teal-700 mb-2">4. Klinische Daten / Elektronische Gesundheitsakten (EGA)</h4>
+                        <ul class="list-disc list-inside space-y-1 text-sm text-stone-600">
+                            <li>Patientenanamnese, Krankheitsverlauf, Komorbiditäten, Medikation, Verhaltenssymptome (z.B. Apathie-Skalen), Laborwerte (Biomarker im Liquor oder Blut wie Beta-Amyloid, Tau-Proteine, Neurofilament light chain).</li>
+                        </ul>
+                         <p class="text-xs text-stone-500 mt-2"><strong>Wichtigkeit:</strong> Kontextuelle Informationen, Personalisierung, Prognoseverfeinerung.</p>
+                    </div>
+
+                    <div class="card bg-stone-50 p-6 rounded-lg border border-stone-200">
+                        <h4 class="text-xl font-semibold text-teal-700 mb-2">5. Genetische Daten</h4>
+                        <ul class="list-disc list-inside space-y-1 text-sm text-stone-600">
+                            <li>APOE-Genotyp (APOE &epsilon;4 als wichtiger Risikofaktor), andere Genvarianten, die mit Alzheimer oder Demenz assoziiert sind.</li>
+                        </ul>
+                        <p class="text-xs text-stone-500 mt-2"><strong>Wichtigkeit:</strong> Besonders wichtig für die Identifizierung von Hochrisikopatienten vor dem Ausbruch der Symptome.</p>
+                    </div>
+
+                    <div class="card bg-stone-50 p-6 rounded-lg border border-stone-200">
+                        <h4 class="text-xl font-semibold text-teal-700 mb-2">6. Umwelt- & Lebensstildaten (indirekt relevant)</h4>
+                        <ul class="list-disc list-inside space-y-1 text-sm text-stone-600">
+                            <li>Schlafdaten, Aktivitätslevel, Ernährungsverhalten, soziale Interaktion.</li>
+                        </ul>
+                        <p class="text-xs text-stone-500 mt-2"><strong>Wichtigkeit:</strong> Können indirekt Einfluss auf die kognitive Gesundheit haben und für präventive Ansätze wichtig sein.</p>
+                    </div>
+                </div>
+                <p class="text-stone-700 mt-6">
+                    Die <strong>multimodale Integration</strong> all dieser Daten erlaubt der KI, ein ganzheitliches Modell der Krankheit und ihrer Progression aufzubauen und komplexe Korrelationen zu erkennen.
+                </p>
+            </div>
+        </section>
+
+        <section id="ethik" class="content-section mb-16">
+            <div class="bg-white p-8 rounded-xl shadow-lg">
+                <h2 class="text-3xl font-bold text-teal-700 mb-4">Datenquellen, Datenschutz & Ethische Herausforderungen</h2>
+                <p class="text-stone-700 mb-6">Der ethische und datenschutzkonforme Umgang mit hochsensiblen Brain-Data und Gesundheitsinformationen ist bei BCI-Anwendungen von größter Bedeutung.</p>
+
+                <div class="mb-6">
+                    <h3 class="text-2xl font-semibold text-teal-600 mb-3">Mögliche Datenquellen:</h3>
+                    <ul class="list-disc list-inside space-y-1 text-sm text-stone-600">
+                        <li>Klinische Studien mit BCI-Implantaten (primäre und derzeit einzige Quelle für direkte neuronale Aktivitätsdaten).</li>
+                        <li>Universitätskliniken und Forschungseinrichtungen (Kohortenstudien zu Alzheimer und Demenz mit umfangreichen multimodalen Daten).</li>
+                        <li>Nationale & internationale Demenzregister (z.B. ADNI, Euro-ADNI) bieten große, standardisierte Datensätze.</li>
+                        <li>Neurologische Spezialpraxen (zukünftig, mit expliziter Patienteneinwilligung).</li>
+                        <li>Post-Mortem-Hirngewebe-Banken (für Korrelation von neuronalen Aktivitäten und pathologischen Veränderungen).</li>
+                    </ul>
+                </div>
+                
+                <div class="accordion-item mb-4 border border-stone-200 rounded-lg">
+                    <button class="accordion-header w-full text-left px-6 py-4 bg-stone-50 hover:bg-stone-100 focus:outline-none rounded-t-lg">
+                        <span class="text-xl font-semibold text-teal-700">Datenschutzmaßnahmen (DSGVO-Konformität & darüber hinaus)</span>
+                        <span class="float-right transform transition-transform duration-300">&#x25BC;</span>
+                    </button>
+                    <div class="accordion-content px-6 py-4 bg-white rounded-b-lg">
+                        <ul class="list-disc list-inside space-y-2 text-sm text-stone-600">
+                            <li><strong>Informierte Einwilligung:</strong> Umfassend, detailliert und wiederholt eingeholt.</li>
+                            <li><strong>Anonymisierung/Pseudonymisierung:</strong> Maximale Sicherheit, strenge Zugangskontrollen.</li>
+                            <li><strong>"Right to be forgotten" / Datenlöschung:</strong> Patientenrecht muss gewährleistet sein.</li>
+                            <li><strong>Datensparsamkeit:</strong> Nur absolut notwendige Daten sammeln und verarbeiten.</li>
+                            <li><strong>Robuste Sicherheitsarchitektur:</strong> End-to-End-Verschlüsselung, Mehrfaktor-Authentifizierung, Sicherheitsaudits.</li>
+                            <li><strong>Transparenz über Datennutzung:</strong> Klare Information für Patienten.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="accordion-item border border-stone-200 rounded-lg">
+                    <button class="accordion-header w-full text-left px-6 py-4 bg-stone-50 hover:bg-stone-100 focus:outline-none rounded-t-lg">
+                        <span class="text-xl font-semibold text-teal-700">Ethische Herausforderungen (spezifisch für BCI & Demenz)</span>
+                        <span class="float-right transform transition-transform duration-300">&#x25BC;</span>
+                    </button>
+                    <div class="accordion-content px-6 py-4 bg-white rounded-b-lg">
+                        <ul class="list-disc list-inside space-y-2 text-sm text-stone-600">
+                            <li><strong>"Brain Privacy" / Mentale Privatsphäre:</strong> Schutz vor Auslesen von Gedanken/Emotionen.</li>
+                            <li><strong>Autonomie & Entscheidungsfähigkeit:</strong> Einwilligung bei fortgeschrittener Demenz.</li>
+                            <li><strong>Identität & Persönlichkeit:</strong> Mögliche Veränderungen durch Hirnstimulation.</li>
+                            <li><strong>Bias & Fairness:</strong> Zugangsgerechtigkeit, repräsentative Trainingsdaten.</li>
+                            <li><strong>Überwachung & Kontrolle:</strong> Missbrauchspotenzial durch dauerhafte Hirnüberwachung.</li>
+                            <li><strong>Verantwortlichkeit bei Fehlfunktionen:</strong> Wer haftet bei Schäden durch die BCI?</li>
+                            <li><strong>Klinische Wirksamkeit vs. invasiver Eingriff:</strong> Nutzen-Risiko-Abwägung.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="ki-entwicklung" class="content-section mb-16">
+            <div class="bg-white p-8 rounded-xl shadow-lg">
+                <h2 class="text-3xl font-bold text-teal-700 mb-4">Der KI-Entwicklungsprozess: Training & Qualität</h2>
+                <p class="text-stone-700 mb-6">Die Entwicklung einer KI für Alzheimer/Demenz mit einer BCI ist hochkomplex und erfordert spezialisierte Ansätze.</p>
+
+                <h3 class="text-2xl font-semibold text-teal-600 mb-3">Trainingsmethoden der KI:</h3>
+                <ul class="list-none space-y-3 mb-6 text-stone-700">
+                    <li>
+                        <strong class="text-teal-700">Überwachtes Lernen (primärer Ansatz):</strong>
+                        <p class="text-sm ml-4">Die KI lernt, aus den neuronalen und multimodalen Daten Muster zu erkennen, die mit spezifischen kognitiven Zuständen, Gedächtnisabrufen, der Progression der Demenz oder dem Ansprechen auf Stimulation korrelieren.</p>
+                    </li>
+                    <li>
+                        <strong class="text-teal-700">Reinforcement Learning (Verstärkendes Lernen):</strong>
+                        <p class="text-sm ml-4">Könnte eine entscheidende Rolle für die kontinuierliche Anpassung der neuronalen Stimulation durch die BCI spielen. Die KI erhält "Belohnungen" für Stimulationen, die den gewünschten Effekt erzielen.</p>
+                    </li>
+                     <li>
+                        <strong class="text-teal-700">Unüberwachtes Lernen:</strong>
+                        <p class="text-sm ml-4">Kann verwendet werden, um in den riesigen Datenmengen von neuronaler Aktivität unbekannte Muster oder Subtypen von Demenz zu entdecken (z.B. mittels Cluster-Analyse).</p>
+                    </li>
+                     <li>
+                        <strong class="text-teal-700">Federated Learning:</strong>
+                        <p class="text-sm ml-4">Könnte eingesetzt werden, um Modelle über Daten von verschiedenen Krankenhäusern zu trainieren, ohne dass die Rohdaten die Einrichtung verlassen müssen, um den Datenschutz zu erhöhen.</p>
+                    </li>
+                    <li>
+                        <strong class="text-teal-700">Genutzte Algorithmen:</strong>
+                        <p class="text-sm ml-4">Recurrent Neural Networks (RNNs) wie LSTMs/GRUs für die Verarbeitung sequenzieller neuronaler Daten; Convolutional Neural Networks (CNNs) für die Analyse von Bilddaten.</p>
+                    </li>
+                </ul>
+
+                <h3 class="text-2xl font-semibold text-teal-600 mb-3">Einfluss der Datenqualität auf Genauigkeit und Zuverlässigkeit:</h3>
+                <ul class="list-disc list-inside space-y-2 mb-6 text-sm text-stone-600">
+                    <li><strong>Rauschen und Artefakte:</strong> (z.B. Muskelaktivität, technische Störungen) in neuronalen Daten führen zu unzuverlässiger KI-Analyse.</li>
+                    <li><strong>Unvollständigkeit, fehlende Daten, falsche Labels/Diagnosen</strong> oder <strong>Bias in den Trainingsdaten</strong> können die Vorhersagegenauigkeit und Robustheit der KI erheblich beeinträchtigen.</li>
+                </ul>
+                <h3 class="text-2xl font-semibold text-teal-600 mb-3">Kontinuierliche Verbesserung der Datenqualität:</h3>
+                <ul class="list-disc list-inside space-y-2 text-sm text-stone-600">
+                    <li>Automatisierte Artefakterkennung und -unterdrückung.</li>
+                    <li>Standardisierte Protokolle für die Datenerfassung über Studienzentren hinweg.</li>
+                    <li>Regelmäßige Kalibrierung und Validierung der Sensoren und des Implantats.</li>
+                    <li>Experten-Feedback und manuelle Verifikation zur Korrektur von Datenanomalien.</li>
+                    <li>Robuste Datenfusion und -integration, longitudinale Datenpflege.</li>
+                    <li>Aktives Lernen: KI fordert bei Unsicherheiten gezielt weitere Daten oder Expertenfeedback an.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="weiterentwicklung" class="content-section mb-16">
+            <div class="bg-white p-8 rounded-xl shadow-lg">
+                <h2 class="text-3xl font-bold text-teal-700 mb-4">Kontinuierliche Weiterentwicklung der KI & Technologische Perspektive</h2>
+                <p class="text-stone-700 mb-6">Die Anpassungsfähigkeit und kontinuierliche Optimierung der KI sind entscheidend, da Alzheimer/Demenz progressive Erkrankungen sind und die Forschung ständig neue Erkenntnisse liefert.</p>
+
+                <h3 class="text-2xl font-semibold text-teal-600 mb-3">Nutzung neuer Daten aus der Praxis zur Optimierung:</h3>
+                <ul class="list-disc list-inside space-y-2 mb-6 text-sm text-stone-600">
+                    <li><strong>Langzeit-Patientenverläufe mit BCI:</strong> Kontinuierliche Sammlung von Daten (neuronale Aktivität, kognitive Testscores, Verhaltensbeobachtungen) zur Wirksamkeitsüberwachung und Anpassung der Stimulationsparameter.</li>
+                    <li><strong>Feedback von Ärzten und Betreuern:</strong> Klinisches Feedback zur beobachteten Verbesserung und zur Usability/Akzeptanz der BCI-Schnittstelle.</li>
+                    <li><strong>Neue wissenschaftliche Erkenntnisse:</strong> Integration neuer Biomarker, genetischer Risikofaktoren oder detaillierterer neuronaler Korrelate.</li>
+                    <li><strong>"Real-World Evidence" (RWE):</strong> Nutzung aggregierter, anonymisierter Daten aus der breiteren Patientenversorgung zur Validierung unter realen Bedingungen.</li>
+                    <li><strong>Adaptives Lernen:</strong> Die KI sollte so konzipiert sein, dass sie kontinuierlich aus neuen Daten lernt und ihre Modelle selbstständig aktualisiert.</li>
+                </ul>
+
+                <h3 class="text-2xl font-semibold text-teal-600 mb-3">Technologische Perspektive (aus PDF):</h3>
+                <ul class="list-disc list-inside space-y-2 text-sm text-stone-600">
+                    <li><strong>KI-Früherkennung & Verlaufsüberwachung:</strong> Algorithmen detektieren subtile Veränderungen in Bewegungsmustern, Schlafrhythmus oder Kommunikationsgewohnheiten aus Smartphone-/Wearable-Daten.</li>
+                    <li><strong>Digitale Hilfsmittel & Assistenzsysteme:</strong> Smarte Erinnerungs-/Orientierungshilfen (z.B. "Simon" App), assistive Geräte für Zuhause (z.B. "Florence Project"), vernetzte Smart-Home-Systeme (Sturzerkennung, Herdabschaltung).</li>
+                    <li><strong>Robotik & digitale Assistenten:</strong> Pflegeroboter (z.B. PARO-Robbenbaby zur emotionalen Unterstützung), soziale Roboter, Sprachassistenten (Alexa, Siri) für Erinnerungen, Unterhaltung. Chatbot-Systeme für kognitive Anregung und Angehörigen-Beratung (z.B. ADQueryAid).</li>
+                    <li><strong>Unterstützung für Pflegende:</strong> Digitale Plattformen, Matching-Systeme, KI-gestützte Chatbots, automatische Dokumentationstools.</li>
+                    <li><strong>Risiken der Technologie-Nutzung:</strong> Datenschutzbedenken, Usability-Probleme, Gefahr einer sozialen Kluft durch Kosten, Ersetzung menschlichen Kontakts, und unzureichende Effektivität.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="soziale-wirtschaftliche-implikationen" class="content-section mb-16">
+            <div class="bg-white p-8 rounded-xl shadow-lg">
+                <h2 class="text-3xl font-bold text-teal-700 mb-4">Soziale & Wirtschaftliche Implikationen</h2>
+                <p class="text-stone-700 mb-6">Demenz hat weitreichende Auswirkungen auf Gesellschaft und Wirtschaft, die über die medizinische Versorgung hinausgehen.</p>
+
+                <h3 class="text-2xl font-semibold text-teal-600 mb-3">Gesellschaftliche Perspektive:</h3>
+                <ul class="list-disc list-inside space-y-2 mb-6 text-sm text-stone-600">
+                    <li><strong>Belastung von Angehörigen:</strong> Großteil der Betreuung durch Familienangehörige (ca. 5 Stunden/Tag, 70% Frauen), führt zu emotionalem Stress, körperlicher Überlastung, sozialer Isolation und finanziellen Einbußen. Macht ca. 50% der Gesamtkosten von Demenz aus.</li>
+                    <li><strong>Pflegeinfrastruktur & Versorgungslücke:</strong> Große weltweite Unterschiede, Mangel an Pflegeheimplätzen, Personalmangel, finanzielle Hürden in hochentwickelten Ländern. In Low- and Middle-Income Countries (LMIC) oft fast gänzlich fehlende spezialisierte Einrichtungen; über 70% der Betroffenen werden 2050 in diesen Ländern leben.</li>
+                    <li><strong>Stigma:</strong> In vielen Kulturen haftet Demenz ein Stigma an, führt zu späten Diagnosen und mangelnder Hilfe. Sogar 1 von 3 Ärzten glaubt fälschlicherweise, Demenz sei ein normaler Alterungsprozess.</li>
+                    <li><strong>Chancen:</strong> Wachsendes öffentliches Bewusstsein, demenzfreundliche Gemeinschaften (z.B. Japan, Großbritannien), Unterstützungsprogramme für Angehörige, Abbau von Berührungsängsten (z.B. Jugendgruppen mit Patienten).</li>
+                </ul>
+
+                <h3 class="text-2xl font-semibold text-teal-600 mb-3">Wirtschaftliche Perspektive:</h3>
+                <ul class="list-disc list-inside space-y-2 text-sm text-stone-600">
+                    <li><strong>Kostenverteilung & implizite Lasten:</strong> Informelle Pflege macht bis zu zwei Drittel der Gesamtkosten in Niedrigeinkommensländern aus. Führt zu entgangener Arbeitsproduktivität und gesundheitlichen Folgen für Pflegende.</li>
+                    <li><strong>Neue Therapien – Fluch oder Segen für die Kassen?</strong> Bieten Chance zur Kostenersparnis bei verzögerter Progression, aber extrem hohe Therapiekosten (z.B. Lecanemab 26.000 US$/Patient/Jahr) könnten Gesundheitssysteme belasten. Risiko ungleichen Zugangs.</li>
+                    <li><strong>Volkswirtschaftliche Chancen:</strong> Wachsender Markt für Demenzprävention, -diagnostik und -versorgung stimuliert Innovation ("Silver Economy"). Investitionen in Prävention sind langfristig kosteneffizient.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="politische-perspektive" class="content-section mb-16">
+            <div class="bg-white p-8 rounded-xl shadow-lg">
+                <h2 class="text-3xl font-bold text-teal-700 mb-4">Politische Perspektive & Ganzheitlicher Ansatz</h2>
+                <p class="text-stone-700 mb-6">Regierungen und internationale Gemeinschaften spielen eine Schlüsselrolle bei der Bewältigung der Demenzherausforderung.</p>
+
+                <h3 class="text-2xl font-semibold text-teal-600 mb-3">Nationale Demenzpläne:</h3>
+                <ul class="list-disc list-inside space-y-2 mb-6 text-sm text-stone-600">
+                    <li>Laut WHO hatten 2021 nur etwa ein Viertel aller Länder (32 von 194 Staaten) eine nationale Demenzstrategie oder einen Aktionsplan.</li>
+                    <li>Ziele des WHO Globalen Aktionsplans Demenz 2017-2025 (75% der Länder mit Strategie bis 2025) werden verfehlt; Verlängerung bis 2031 empfohlen.</li>
+                    <li>Risiko politischer Trägheit könnte fatale Folgen haben: Unvorbereitete Staaten könnten von der Zunahme an Pflegebedürftigen überrollt werden.</li>
+                </ul>
+
+                <h3 class="text-2xl font-semibold text-teal-600 mb-3">Chancen & Internationale Kooperation:</h3>
+                <ul class="list-disc list-inside space-y-2 mb-6 text-sm text-stone-600">
+                    <li>Demenz rückt international stärker ins Blickfeld.</li>
+                    <li>Weltgesundheitsversammlung verabschiedete 2017 den Demenz-Aktionsplan.</li>
+                    <li>Organisationen wie WHO und Alzheimer's Disease International (ADI) unterstützen Länder mit Beratung und Plattformen.</li>
+                    <li>Länderübergreifende Forschungskooperationen (z.B. EU-geförderte JPND-Initiative).</li>
+                    <li>Wachsendes Engagement der Zivilgesellschaft treibt Politik voran (z.B. Welt-Alzheimer Woche).</li>
+                </ul>
+
+                <h3 class="text-2xl font-semibold text-teal-600 mb-3">Maßnahmenbündel für Regierungen:</h3>
+                <ul class="list-disc list-inside space-y-2 text-sm text-stone-600">
+                    <li><strong>Pflege- und Gesundheitssystem stärken:</strong> Ausbau geriatrischer Versorgungsstrukturen, mehr spezialisiertes Personal, faire Finanzierung.</li>
+                    <li><strong>Unterstützung für Familien:</strong> Pflegegelder, Rentenansprüche, familiengerechte Arbeitszeiten.</li>
+                    <li><strong>Präventionspolitik:</strong> Stärkung der Bildung, Kampagnen gegen Risikofaktoren, altersfreundliche Städte.</li>
+                    <li><strong>Forschung fördern:</strong> Erhöhung staatlicher Mittel (z.B. USA mit über 3 Mrd. US$/Jahr für Alzheimer-Forschung über NIH), Teilen von Erkenntnissen.</li>
+                    <li><strong>Gesellschaftliche Aufklärung & Rechte:</strong> Schutz der Rechte von Demenzkranken durch Gesetze und Kampagnen.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="fazit" class="content-section mb-16">
+            <div class="bg-white p-8 rounded-xl shadow-lg">
+                <h2 class="text-3xl font-bold text-teal-700 mb-4">Fazit & Der Weg nach vorn</h2>
+                <p class="text-stone-700 mb-6">Die Analyse zeigt, dass Demenz und Alzheimer multidimensionale Herausforderungen darstellen, die nur durch ein ebenso vielseitiges Herangehen gemeistert werden können.</p>
+
+                <h3 class="text-2xl font-semibold text-teal-600 mb-3">Zusammenfassende Erkenntnisse:</h3>
+                <ul class="list-disc list-inside space-y-2 mb-6 text-stone-700">
+                    <li><strong>Medizinisch:</strong> Hoffnung durch neue Therapien, Prävention und Diagnostik, aber Wirksamkeit und Zugänglichkeit bleiben begrenzt.</li>
+                    <li><strong>Gesellschaftlich:</strong> Welt muss ältere Bevölkerung würdig versorgen, ohne Überlastung von Familien und Systemen.</li>
+                    <li><strong>Technologisch:</strong> Erhebliche Chancen durch KI (Früherkennung) und Assistenzsysteme, erfordert aber Vorsicht bei Datenschutz und Implementierung.</li>
+                    <li><strong>Wirtschaftlich:</strong> Kostenexplosion durch Demenz droht; Investitionen in Prävention, Forschung und Pflege sind ökonomisch sinnvoll.</li>
+                    <li><strong>Politisch:</strong> Regierungen müssen Demenz zur Priorität machen; nationale Strategien und internationale Kooperation sind unerlässlich.</li>
+                </ul>
+
+                <h3 class="text-2xl font-semibold text-teal-600 mb-3">Hoffnung & Ausblick:</h3>
+                <ul class="list-disc list-inside space-y-2 mb-6 text-stone-700">
+                    <li>Das Thema Demenz erfährt weltweit so viel Aufmerksamkeit wie nie zuvor.</li>
+                    <li>Forschungsfortschritte und zivilgesellschaftliches Engagement bringen das Thema aus dem Schatten.</li>
+                    <li>Ein Durchbruch (wirksames Medikament, Impfstoff, neues Pflegeparadigma) könnte das Blatt wenden und Millionen Menschen ein besseres Altern ermöglichen.</li>
+                    <li><strong>Der Weg nach vorn:</strong> Jetzt entschlossen und global koordiniert handeln, um die Chancen zu realisieren und die Risiken (steigende Fallzahlen, Versorgungslücken) einzudämmen.</li>
+                </ul>
+
+                <h3 class="text-2xl font-semibold text-teal-600 mb-3">Abschließende Botschaft:</h3>
+                <p class="text-lg text-stone-700">
+                    Demenz und Alzheimer verlangen einen langen Atem von Medizin, Gesellschaft, Technologie, Wirtschaft und Politik gleichermaßen. Nur mit gemeinsamer Anstrengung kann die Welt diese Herausforderung bewältigen und dafür sorgen, dass Menschen mit Demenz überall würdig leben und betreut werden.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-stone-800 text-stone-300 text-center p-6 mt-12">
+        <p>&copy; 2025 Präsentation: KI bei Alzheimer & Demenz mit BCI. Alle Rechte vorbehalten.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Accordion functionality
+            const accordionHeaders = document.querySelectorAll('.accordion-header');
+            accordionHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    const accordionContent = header.nextElementSibling;
+                    const arrow = header.querySelector('span:last-child');
+
+                    if (accordionContent.classList.contains('open')) {
+                        accordionContent.classList.remove('open');
+                        arrow.style.transform = 'rotate(0deg)';
+                    } else {
+                        accordionContent.classList.add('open');
+                        arrow.style.transform = 'rotate(180deg)';
+                    }
+                });
+            });
+
+            // Smooth scroll and active nav link
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('.content-section');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetSection = document.getElementById(targetId);
+                    if (targetSection) {
+                        targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            });
+            
+            function updateActiveNavLink() {
+                let currentSectionId = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop - 100;
+                    const sectionBottom = sectionTop + section.offsetHeight;
+                    if (window.scrollY >= sectionTop && window.scrollY < sectionBottom) {
+                        currentSectionId = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active-nav-link');
+                    if (link.getAttribute('href') === `#${currentSectionId}`) {
+                        link.classList.add('active-nav-link');
+                    }
+                });
+            }
+
+            window.addEventListener('scroll', updateActiveNavLink);
+            updateActiveNavLink();
+        });
+    </script>
+
+</body>
+</html>

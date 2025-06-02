@@ -1,528 +1,993 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KI bei Alzheimer & Demenz mit BCI</title>
+    <title>KI und Demenz Informationsportal</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* Chosen Palette: Calm Harmony - Warm Neutrals (bg-stone-100, bg-white, bg-stone-50), Soft Teal/Blue Accent (teal-700, teal-600, teal-500) */
-        /* Application Structure Plan: Single scrolling page with a sticky top navigation. Each "slide" from the presentation outline is a distinct section on the page, allowing for clear thematic grouping. The navigation links facilitate quick jumps between these sections, providing a non-linear exploration path suitable for a presentation. Accordion elements are used for detailed lists (e.g., data types, ethical challenges) to maintain a clean layout and prevent information overload, enhancing user understanding by allowing them to expand details at will. */
-        /* Visualization & Content Choices:
-            - Content is primarily textual and list-based, as in the source presentation outline.
-            - No complex quantitative data points were identified in the provided text that would necessitate Chart.js or Plotly.js for effective consumption beyond clear textual presentation.
-            - Interactive elements focus on navigation (sticky nav, smooth scroll) and information reveal (accordions) to manage content density and encourage exploration.
-            - All content from the combined source is integrated directly into the HTML structure.
-            - CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. */
-        /* CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. */
-
+        /* Custom CSS for animated background gradient */
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Quicksand', sans-serif; /* Changed to Quicksand */
+            background: linear-gradient(-45deg, #2a0a4a, #3b0d6b, #4c108c, #5d13ad);
+            background-size: 400% 400%;
+            animation: gradient-animation 15s ease infinite;
+            color: #FFFFFF; /* All text is now white */
+            overflow-x: hidden; /* Prevent horizontal scroll due to blobs */
         }
-        .sticky-nav {
-            position: sticky;
-            top: 0;
-            z-index: 50;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+
+        @keyframes gradient-animation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
-        .content-section {
-            padding-top: 80px;
-            margin-top: -80px;
+
+        /* Custom scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 12px;
         }
-        .card {
-            transition: all 0.3s ease-in-out;
+
+        ::-webkit-scrollbar-track {
+            background: #1a052e; /* Dark track */
+            border-radius: 10px;
         }
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+        ::-webkit-scrollbar-thumb {
+            background: #ff69b4; /* Vibrant Pink thumb */
+            border-radius: 10px;
         }
-        .accordion-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s ease-out;
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00bcd4; /* Cyan on hover */
         }
-        .accordion-content.open {
-            max-height: 2000px;
-            transition: max-height 0.5s ease-in;
+
+        /* Decorative Blob Animations */
+        .blob {
+            position: absolute;
+            background: linear-gradient(to right, var(--color-start), var(--color-end));
+            border-radius: 50%;
+            filter: blur(80px); /* Blurred effect */
+            opacity: 0.3; /* Semi-transparent */
+            animation: blob-animation 20s infinite alternate ease-in-out;
+            z-index: -1; /* Ensure blobs are behind content */
         }
-        .nav-link {
-            transition: color 0.3s ease;
+
+        .blob-1 {
+            width: 300px;
+            height: 300px;
+            top: 10%;
+            left: 5%;
+            --color-start: #ff69b4; /* Pink */
+            --color-end: transparent;
+            animation-duration: 25s;
         }
-        .nav-link:hover {
-            color: #0D9488;
+
+        .blob-2 {
+            width: 400px;
+            height: 400px;
+            top: 50%;
+            right: 10%;
+            --color-start: #00bcd4; /* Cyan */
+            --color-end: transparent;
+            animation-duration: 20s;
+            animation-delay: 2s;
         }
-        .active-nav-link {
-            color: #0D9488;
-            font-weight: 600;
-            border-bottom: 2px solid #0D9488;
+
+        .blob-3 {
+            width: 250px;
+            height: 250px;
+            bottom: 5%;
+            left: 20%;
+            --color-start: #ff69b4; /* Pink */
+            --color-end: transparent;
+            animation-duration: 22s;
+            animation-delay: 4s;
+        }
+
+        .blob-4 {
+            width: 350px;
+            height: 350px;
+            top: 20%;
+            right: 30%;
+            --color-start: #00bcd4; /* Cyan */
+            --color-end: transparent;
+            animation-duration: 28s;
+            animation-delay: 1s;
+        }
+
+        @keyframes blob-animation {
+            0% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(20px, -30px) scale(1.05); }
+            50% { transform: translate(-10px, 10px) scale(0.95); }
+            75% { transform: translate(30px, 20px) scale(1.02); }
+            100% { transform: translate(0, 0) scale(1); }
+        }
+
+        /* Secondary text color - now white */
+        .text-secondary {
+            color: #FFFFFF;
+        }
+
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            display: none; /* Hidden by default */
+        }
+
+        #mobile-menu.active {
+            display: block; /* Always display when active, regardless of screen size */
+        }
+
+        /* Specific styles for the new grid layouts */
+        .grid-item {
+            background-color: rgba(60, 10, 100, 0.5); /* A slightly lighter purple for grid items */
+            border-radius: 0.75rem; /* rounded-xl */
+            padding: 1.5rem; /* p-6 */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* shadow-md */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .grid-item .icon {
+            font-size: 3rem; /* Larger icon size */
+            margin-bottom: 1rem;
+            color: #00bcd4; /* Cyan icon color */
+        }
+
+        /* Style for sub-section headers with icons */
+        .section-heading-with-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Center horizontally */
+            gap: 0.75rem; /* Space between icon and text */
+            margin-bottom: 1.5rem;
+            text-align: center; /* Ensure text is centered below icon */
+        }
+
+        .section-heading-with-icon .icon {
+            font-size: 2.5rem; /* Slightly smaller for sub-headings */
+            color: #ff69b4; /* Pink icon color */
+            margin-bottom: 0; /* Reset margin for inline use */
+        }
+
+        .section-heading-with-icon h3 {
+            margin-bottom: 0; /* Remove default margin from h3 */
+        }
+
+        /* Style for list items with icons */
+        .list-item-with-icon {
+            display: flex;
+            align-items: flex-start; /* Align icon to the top of the text */
+            gap: 0.5rem; /* Space between icon and text */
+            margin-bottom: 0.5rem;
+        }
+
+        .list-item-with-icon .icon {
+            font-size: 1.25rem; /* Smaller for list items */
+            color: #00bcd4; /* Cyan icon color */
+            flex-shrink: 0; /* Prevent icon from shrinking */
+            margin-top: 0.25rem; /* Adjust vertical alignment */
+        }
+
+        /* Specific styles for numbered lists in Fazit section */
+        .numbered-list-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .numbered-list-item .number-circle {
+            flex-shrink: 0;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            background-color: #ff69b4; /* Pink background */
+            color: #2a0a4a; /* Dark purple text for contrast */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .numbered-list-item p {
+            flex-grow: 1;
+            font-size: 1.125rem; /* text-lg */
+            line-height: 1.75rem; /* leading-relaxed */
+        }
+
+        /* New styles for mobile image band */
+        .mobile-image-band {
+            width: 100%;
+            height: 200px; /* Fixed height for mobile band */
+            object-fit: cover;
+            margin-bottom: 2rem; /* Space below the image */
+            border-radius: 0.5rem; /* Rounded corners */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Hide desktop-specific image elements on mobile and vice-versa */
+        .desktop-image-container {
+            display: none; /* Hidden by default on mobile */
+        }
+
+        @media (min-width: 768px) { /* md breakpoint */
+            .mobile-image-band {
+                display: none; /* Hide mobile band on desktop */
+            }
+            .desktop-image-container {
+                display: block; /* Show desktop image container */
+            }
+        }
+
+        /* --- Typography Adjustments based on User Request --- */
+        /* Main page title (now a p tag with a specific class) */
+        .main-page-title { /* New class for the very top title */
+            font-size: 3.5rem; /* Make it very prominent */
+            line-height: 1.1;
+            font-weight: 700; /* Adjusted for Quicksand */
+            color: #FFFFFF;
+        }
+
+        /* Section Titles (now h1 in the content sections) */
+        h1 { /* These are the new main section headings */
+            font-size: 3rem; /* Matching the user's requested size from previous iteration */
+            line-height: 1.2;
+            font-weight: 700; /* Adjusted for Quicksand */
+            color: #FFFFFF;
+        }
+
+        /* Introductory Paragraphs (now h2) */
+        h2 { /* These are the new introductory paragraphs */
+    font-size: 2.5rem; /* Larger than body text, smaller than h1 */
+    line-height: 1.5;
+    font-weight: 700; /* Changed to Bold as per user request */
+    color: #FFFFFF;
+        }
+
+        /* Sub-section Titles (h3) */
+        h3 {
+            font-size: 2.25rem; /* Increased proportionally */
+            line-height: 1.3;
+            font-weight: 600; /* Adjusted for Quicksand */
+            color: #FFFFFF;
+        }
+
+        /* Sub-sub-section Titles (h4) */
+        h4 {
+            font-size: 1.75rem; /* Increased proportionally */
+            line-height: 1.4;
+            font-weight: 600; /* Adjusted for Quicksand */
+            color: #FFFFFF;
+        }
+
+        /* Body Text and List Items */
+        p, li {
+            font-size: 1.125rem; /* text-lg equivalent */
+            line-height: 1.7; /* Slightly looser line height for readability */
+            font-weight: 400; /* Regular */
+            color: #FFFFFF;
+        }
+
+        /* Specific adjustments for numbers in Einleitung grid */
+        .grid-item .text-6xl {
+            font-size: 6.5rem; /* Adjusted slightly to fit with new hierarchy, still very large */
+            line-height: 1;
+            font-weight: 700; /* Adjusted for Quicksand */
+            color: #FFFFFF;
+        }
+
+        /* Specific adjustments for text below numbers in Einleitung grid */
+        .grid-item h3.mb-2 { /* Targeting more specifically to avoid conflicts */
+            font-size: 2.5rem; /* Adjusted to be slightly smaller than h3 now */
+            font-weight: 700; /* Adjusted for Quicksand */
+            color: #FFFFFF;
+        }
+
+        /* Specific adjustments for the numbered list in Fazit */
+        .numbered-list-item .number-circle {
+            font-size: 2rem; /* Adjusted slightly */
+            width: 3rem;
+            height: 3rem;
+            font-weight: 700; /* Adjusted for Quicksand */
+        }
+
+        .numbered-list-item p {
+            font-size: 1.25rem; /* Keep consistent with body text */
+            line-height: 1.6;
+            color: #FFFFFF;
+        }
+
+        /* Adjustments for team/date text */
+        #top p.text-secondary {
+            font-size: 1.25rem;
+            color: #FFFFFF;
+        }
+
+        /* Adjustments for the Abschließende Botschaft */
+        section p.text-xl.font-medium.leading-relaxed {
+            font-size: 1.75rem;
+            line-height: 1.5;
+            font-weight: 500; /* Adjusted for Quicksand */
+            color: #FFFFFF;
+        }
+
+        /* Ensure link colors are also white unless hovered */
+        a {
+            color: #FFFFFF;
+        }
+        a:hover {
+            color: #ff69b4; /* Keep hover effect */
+        }
+
+        /* Source reference superscript styling */
+        sup a {
+            font-size: 0.75em; /* Smaller superscript */
+            vertical-align: super;
+            color: #00bcd4; /* Cyan color for references */
+            text-decoration: none;
+        }
+        sup a:hover {
+            text-decoration: underline;
         }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body class="bg-stone-100 text-stone-800">
+<body class="min-h-screen flex flex-col">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <div class="blob blob-4"></div>
 
-    <nav class="sticky-nav bg-white/80 shadow-md">
-        <div class="container mx-auto px-6 py-3">
-            <div class="flex flex-col md:flex-row justify-between items-center">
-                <h1 class="text-xl font-bold text-teal-700">KI bei Alzheimer & Demenz</h1>
-                <div class="flex flex-wrap justify-center space-x-4 mt-2 md:mt-0" id="nav-links">
-                    <a href="#problemstellung" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-stone-700">Problemstellung</a>
-                    <a href="#medizinische-fortschritte" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-stone-700">Med. Fortschritte</a>
-                    <a href="#daten-bci" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-stone-700">Daten & BCI</a>
-                    <a href="#ethik" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-stone-700">Ethik & Datenschutz</a>
-                    <a href="#ki-entwicklung" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-stone-700">KI-Entwicklung</a>
-                    <a href="#weiterentwicklung" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-stone-700">Zukunft & Fazit</a>
-                </div>
+<header class="bg-gradient-to-r from-purple-900 to-indigo-900 shadow-lg py-4 px-6 md:px-12 sticky top-0 z-50 rounded-b-xl">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="text-white text-3xl font-bold">
+                <a href="#top" class="hover:text-pink-400 transition-colors">KI &amp; Demenz Informationsportal</a>
             </div>
+            <nav class="hidden">
+                <ul class="flex space-x-8">
+                    <li><a href="#einleitung" class="text-white hover:text-pink-400 transition-colors text-lg font-medium">Einleitung</a></li>
+                    <li><a href="#problemstellung" class="text-white hover:text-pink-400 transition-colors text-lg font-medium">Problemstellung</a></li>
+                    <li><a href="#therapien" class="text-white hover:text-pink-400 transition-colors text-lg font-medium">Therapien &amp; Prävention</a></li>
+                    <li><a href="#diagnostik" class="text-white hover:text-pink-400 transition-colors text-lg font-medium">Früherkennung &amp; KI-Diagnostik</a></li>
+                    <li><a href="#daten" class="text-white hover:text-pink-400 transition-colors text-lg font-medium">Daten &amp; Ethik</a></li>
+                    <li><a href="#ki-entwicklung" class="text-white hover:text-pink-400 transition-lg font-medium">KI-Entwicklung</a></li>
+                    <li><a href="#technologie" class="text-white hover:text-pink-400 transition-colors text-lg font-medium">Technologie</a></li>
+                    <li><a href="#implikationen" class="text-white hover:text-pink-400 transition-colors text-lg font-medium">Implikationen</a></li>
+                    <li><a href="#politik" class="text-white hover:text-pink-400 transition-colors text-lg font-medium">Politik</a></li>
+                    <li><a href="#fazit" class="text-white hover:text-pink-400 transition-colors text-lg font-medium">Fazit</a></li>
+                </ul>
+            </nav>
+            <button id="mobile-menu-button" class="text-white focus:outline-none">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                </svg>
+            </button>
         </div>
-    </nav>
+        <nav id="mobile-menu" class="bg-purple-800 mt-4 rounded-lg">
+            <ul class="flex flex-col space-y-2 py-2">
+                <li><a href="#einleitung" class="block px-4 py-2 text-white hover:bg-purple-700 rounded-md">Einleitung</a></li>
+                <li><a href="#problemstellung" class="block px-4 py-2 text-white hover:bg-purple-700 rounded-md">Problemstellung</a></li>
+                <li><a href="#therapien" class="block px-4 py-2 text-white hover:bg-purple-700 rounded-md">Therapien &amp; Prävention</a></li>
+                <li><a href="#diagnostik" class="block px-4 py-2 text-white hover:bg-purple-700 rounded-md">Früherkennung &amp; KI-Diagnostik</a></li>
+                <li><a href="#daten" class="block px-4 py-2 text-white hover:bg-purple-700 rounded-md">Daten &amp; Ethik</a></li>
+                <li><a href="#ki-entwicklung" class="block px-4 py-2 text-white hover:bg-purple-700 rounded-md">KI-Entwicklung</a></li>
+                <li><a href="#technologie" class="block px-4 py-2 text-white hover:bg-purple-700 rounded-md">Technologie</a></li>
+                <li><a href="#implikationen" class="block px-4 py-2 text-white hover:bg-purple-700 rounded-md">Implikationen</a></li>
+                <li><a href="#politik" class="block px-4 py-2 text-white hover:bg-purple-700 rounded-md">Politik</a></li>
+                <li><a href="#fazit" class="block px-4 py-2 text-white hover:bg-purple-700 rounded-md">Fazit</a></li>
+                <li><a href="#quellenangaben" class="block px-4 py-2 text-white hover:bg-purple-700 rounded-md">Quellenangaben</a></li>
+            </ul>
+        </nav>
+    </header>
 
-    <main class="container mx-auto px-6 py-8">
-
-        <section id="titelblatt" class="content-section mb-16 text-center">
-            <div class="bg-white p-8 rounded-xl shadow-lg">
-                <h2 class="text-4xl font-bold text-teal-700 mb-4">KI im Kampf gegen Alzheimer & Demenz:</h2>
-                <h3 class="text-3xl font-semibold text-teal-600 mb-6">Die Rolle von Gehirn-Computer-Schnittstellen (BCI) und Neuralink</h3>
-                <p class="text-xl text-stone-700 mb-2">Chancen, Herausforderungen und der Weg in die Zukunft der kognitiven Unterstützung</p>
-                <p class="text-lg text-stone-600 mt-8">Referent: Team 2</p>
-                <p class="text-md text-stone-500">Datum: 30. Mai 2025</p>
-            </div>
+    <main class="flex-grow">
+        <section id="top" class="mb-16 text-center py-12 px-6 md:px-12">
+            <p class="main-page-title leading-tight mb-4">
+              KI im Kampf gegen Alzheimer &amp; Demenz: <br>
+            Die Rolle von Gehirn-Computer-Schnittstellen (BCI) und Neuralink </p>
+            <p class="font-semibold mb-6">
+                Chancen, Herausforderungen und der Weg in die Zukunft der kognitiven Unterstützung
+            </p>
+            <p class="text-secondary">
+                <span class="font-bold">Team 2:</span> Jochen Erdmann, Frederik von der Heyden, Sabine Winkler, Christina Nobis
+            </p>
+            <p class="text-secondary">
+                <span class="font-bold">Datum:</span> 30. Mai 2025
+            </p>
         </section>
 
-        <section id="problemstellung" class="content-section mb-16">
-            <div class="bg-white p-8 rounded-xl shadow-lg">
-                <h2 class="text-3xl font-bold text-teal-700 mb-4">Einleitung – Die globale Herausforderung</h2>
-                <p class="text-lg mb-4 text-stone-700">
-                    Demenzerkrankungen, allen voran die Alzheimer-Krankheit, gehören zu den größten gesundheitlichen Herausforderungen unserer alternden Weltbevölkerung. Dieses Segment beleuchtet die aktuelle Situation und die prognostizierte Entwicklung.
-                </p>
-                <h3 class="text-2xl font-semibold text-teal-600 mb-3">Aktuelle Zahlen (2021) & Prognosen:</h3>
-                <ul class="list-disc list-inside space-y-2 mb-6 text-stone-700">
-                    <li>Bereits heute leben weltweit <strong>über 55 Millionen</strong> Menschen mit Demenz.</li>
-                    <li>Jährlich kommen etwa <strong>10 Millionen</strong> Neuerkrankungen hinzu.</li>
-                    <li>Alzheimer ist die häufigste Einzelursache von Demenz und macht rund <strong>60-70%</strong> aller Fälle aus.</li>
-                    <li><strong>Prognose bis 2050:</strong> Es wird mit einer Zunahme auf rund <strong>139 Millionen</strong> Demenzkranke gerechnet (ca. Verdreifachung). Besonders starker Anstieg (ca. 250% vs. ~150% weltweit) wird in Nordafrika und Subsahara-Afrika erwartet.</li>
-                </ul>
-                <h3 class="text-2xl font-semibold text-teal-600 mb-3">Krankheitslast & Wirtschaftliche Belastung:</h3>
-                <ul class="list-disc list-inside space-y-2 text-stone-700">
-                    <li>Schon heute zählt Demenz global zu den <strong>Top 7 Todesursachen</strong> und ist ein Hauptgrund für Pflegebedürftigkeit im Alter.</li>
-                    <li>Die weltweiten Kosten für Demenz beliefen sich 2019 auf rund <strong>1,3 Billionen US-Dollar</strong>. Diese Summe umfasst direkte medizinische Kosten, soziale Betreuungsangebote sowie den "informellen" Wert der unbezahlten Pflege durch Angehörige. Prognostiziert auf <strong>1,7 bis 2,8 Billionen US-Dollar</strong> bis 2030.</li>
-                </ul>
-            </div>
-        </section>
+        <section id="einleitung" class="mb-20 py-12 px-6 md:px-12 relative overflow-hidden">
+            <img src="bilder/map.png" alt="Weltkarte Mobile" class="mobile-image-band md:hidden">
 
-        <section id="problemstellung-bci" class="content-section mb-16">
-            <div class="bg-white p-8 rounded-xl shadow-lg">
-                <h2 class="text-3xl font-bold text-teal-700 mb-4">Problemstellung: Kognitiver Verfall & der Bedarf an BCI</h2>
-                <p class="text-lg mb-6 text-stone-700">
-                    Die primäre Problemstellung, die eine fortgeschrittene Gehirn-Computer-Schnittstelle (BCI) wie Neuralink bei Alzheimer und Demenz adressieren könnte, ist die progressive Verschlechterung der kognitiven Funktionen und die daraus resultierende Einschränkung der Selbstständigkeit und Lebensqualität der Betroffenen.
-                </p>
-                <h3 class="text-2xl font-semibold text-teal-600 mb-3">Spezifische Aspekte des kognitiven Verfalls:</h3>
-                <ul class="list-disc list-inside space-y-2 mb-6 text-stone-700">
-                    <li><strong>Gedächtnisverlust:</strong> Verlust des Kurz- und Langzeitgedächtnisses, beeinträchtigt die Alltagsbewältigung.</li>
-                    <li><strong>Kognitive Defizite:</strong> Schwierigkeiten bei Problemlösung, Entscheidungsfindung, Orientierung und der Ausführung komplexer Aufgaben.</li>
-                    <li><strong>Verlust der Kommunikationsfähigkeit:</strong> Erhebliche Sprach- und Kommunikationsschwierigkeiten im fortgeschrittenen Stadium.</li>
-                    <li><strong>Verlust der Selbstständigkeit:</strong> Patienten werden zunehmend pflegebedürftig und verlieren die Fähigkeit, eigenständig zu leben.</li>
-                    <li><strong>Emotionale & Verhaltensstörungen:</strong> Depressionen, Angstzustände, Aggressionen und Apathie sind häufige Begleiterscheinungen.</li>
-                </ul>
-                <h3 class="text-2xl font-semibold text-teal-600 mb-3">Ziel der BCI-Anwendung (Neuralink-Konzept):</h3>
-                <p class="text-stone-700">
-                    Die BCI soll durch direkte neuronale Intervention oder Assistenz die kognitiven Funktionen stabilisieren, wiederherstellen oder kompensieren, um Patienten eine höhere Lebensqualität und längere Selbstständigkeit zu ermöglichen. Dies könnte die Modulation neuronaler Netzwerke oder die Schaffung einer Schnittstelle zur Unterstützung kognitiver Prozesse (z.B. Gedächtnisstützen) bedeuten.
-                </p>
-            </div>
-        </section>
-
-        <section id="medizinische-fortschritte" class="content-section mb-16">
-            <div class="bg-white p-8 rounded-xl shadow-lg">
-                <h2 class="text-3xl font-bold text-teal-700 mb-4">Medizinische Fortschritte & Grenzen – Therapien & Prävention</h2>
-                <p class="text-lg mb-4 text-stone-700">
-                    Die medizinische Forschung erzielt Fortschritte bei der Behandlung und Prävention von Alzheimer, doch es bleiben Herausforderungen.
-                </p>
-                <h3 class="text-2xl font-semibold text-teal-600 mb-3">Neue Therapien – Ein Hoffnungsschimmer:</h3>
-                <ul class="list-disc list-inside space-y-2 mb-6 text-stone-700">
-                    <li>Erstmals Hoffnung auf <strong>krankheitsmodifizierende Behandlungen</strong>, die direkt auf die Alzheimer-Pathologie (Beta-Amyloid-Plaques) abzielen.</li>
-                    <li><strong>Aducanumab</strong> (2021, USA) war die erste zugelassene medikamentöse Therapie.</li>
-                    <li><strong>Lecanemab</strong> (Legembi, 2023) reduzierte in Studien Amyloid-Ablagerungen und verlangsamte den kognitiven Abbau bei frühem Alzheimer moderat um rund <strong>27% über 18 Monate</strong>.</li>
-                    <li>Weitere Wirkstoffe (z.B. Antikörper gegen Tau-Proteine, entzündungshemmende Ansätze) sind in Entwicklung.</li>
-                </ul>
-                <h3 class="text-2xl font-semibold text-teal-600 mb-3">Risiken und Grenzen der Therapien:</h3>
-                <ul class="list-disc list-inside space-y-2 mb-6 text-stone-700">
-                    <li>Bislang keine Heilung in Sicht; begrenzter Nutzen und Nebenwirkungen (sogenannte ARIA-Effekte: Hirnödeme, Mikroblutungen).</li>
-                    <li>Extrem kostspielig (Lecanemab ca. <strong>26.500 US$/Jahr</strong> in den USA).</li>
-                    <li>Risiko globaler Ungleichheit im Zugang und Überlastung der Diagnostik ("Diagnose-Tsunami").</li>
-                </ul>
-                <h3 class="text-2xl font-semibold text-teal-600 mb-3">Prävention & Risikofaktoren:</h3>
-                <ul class="list-disc list-inside space-y-2 text-stone-700">
-                    <li>Ein erheblicher Teil der Demenzfälle (<strong>40-45%</strong>) könnte durch vorbeugende Maßnahmen hinausgezögert oder sogar verhindert werden.</li>
-                    <li>Die Lancet-Kommission 2020/2024 identifizierte <strong>12-14 modifizierbare Risikofaktoren</strong> (z.B. niedrige Bildung, Hörverlust, Bluthochdruck, Diabetes, soziale Isolation, Rauchen, Luftverschmutzung).</li>
-                    <li>Chancen durch multimodale Lebensstil-Interventionen (<strong>FINGER-Studie</strong>, Finnland).</li>
-                    <li>Herausforderungen in der Prävention: Viele Risikofaktoren hängen mit gesellschaftlichen Bedingungen zusammen; Risiko unzureichender Umsetzung in Entwicklungs- und Schwellenländern.</li>
-                </ul>
-            </div>
-        </section>
-
-        <section id="frueherkennung-ki" class="content-section mb-16">
-            <div class="bg-white p-8 rounded-xl shadow-lg">
-                <h2 class="text-3xl font-bold text-teal-700 mb-4">Medizinische Fortschritte – Früherkennung & KI-Diagnostik</h2>
-                <p class="text-lg mb-4 text-stone-700">
-                    Fortschritte in der Diagnostik eröffnen neue Chancen, Demenz deutlich früher und leichter festzustellen, insbesondere durch den Einsatz von KI.
-                </p>
-                <h3 class="text-2xl font-semibold text-teal-600 mb-3">Früherkennung & Diagnostik – Neue Chancen:</h3>
-                <ul class="list-disc list-inside space-y-2 mb-6 text-stone-700">
-                    <li><strong>Bluttests:</strong> Ein Meilenstein ist die Entwicklung von Biomarker-Bluttests. Im Mai 2025 wurde ein Bluttest (Lumipulse G pTau/Aß42) von der US-Gesundheitsbehörde FDA zugelassen, der Alzheimer-typische Proteine im Plasma misst und Amyloid-Plaques im Gehirn mit hoher Wahrscheinlichkeit erkennt, ohne kostspielige PET-Scans oder invasive Lumbalpunktionen.</li>
-                    <li><strong>Bildgebende Verfahren:</strong> PET-Tracer für Amyloid und Tau sowie neue MRT-Sequenzen ermöglichen eine immer frühere und spezifischere Diagnose.</li>
-                    <li>Verbesserte neuropsychologische Tests erfassen beginnende kognitive Störungen sensitiver.</li>
-                </ul>
-                <h3 class="text-2xl font-semibold text-teal-600 mb-3">Innovationen durch KI-gestützte Diagnostik:</h3>
-                <ul class="list-disc list-inside space-y-2 mb-6 text-stone-700">
-                    <li>KI wird zu einem vielversprechenden Werkzeug in der Früherkennung von Demenz.</li>
-                    <li><strong>Sprachmusteranalyse:</strong> KI-Algorithmen erkennen subtile Anzeichen von kognitivem Abbau in Alltagsdaten. Eine Studie zeigte hohe Genauigkeit bei der Unterscheidung von gesunden und kognitiv beeinträchtigten Personen anhand kurzer Sprachanalysen.</li>
-                    <li><strong>Gehirnscan-Analyse:</strong> KI wird eingesetzt, um Muster in Gehirnscans zu detektieren, die für Alzheimer typisch sind, teils Jahre vor der klinischen Diagnose.</li>
-                    <li><strong>Vorteile der KI-Diagnostik:</strong> Schneller, objektiver und flächendeckender, wichtig bei begrenzter Zahl von Fachärzten.</li>
-                </ul>
-                <h3 class="text-2xl font-semibold text-teal-600 mb-3">Risiken in der Diagnostik:</h3>
-                <ul class="list-disc list-inside space-y-2 text-stone-700">
-                    <li>Frühe Diagnose kann psychisch belastend sein, solange keine heilende Therapie verfügbar ist.</li>
-                    <li>Gefahr einer Überlastung der Gesundheitsversorgung durch einen "Diagnose-Tsunami".</li>
-                    <li>Mangel an Fachärzten und Demenzambulanzen, insbesondere in ländlichen und ärmeren Regionen.</li>
-                    <li>Genauigkeit neuer Tests: Risiko von falsch-positiven oder falsch-negativen Befunden.</li>
-                </ul>
-            </div>
-        </section>
-
-        <section id="daten-bci" class="content-section mb-16">
-            <h2 class="text-3xl font-bold text-teal-700 mb-8 text-center">Daten als Fundament für KI & BCI</h2>
-            <div class="bg-white p-8 rounded-xl shadow-lg mb-8">
-                <h3 class="text-2xl font-semibold text-teal-600 mb-4">Benötigte Datentypen für die KI-Entwicklung</h3>
-                <p class="text-stone-700 mb-6">Für die Entwicklung einer KI-Anwendung mittels Neuralink zur Unterstützung bei Alzheimer und Demenz sind hochspezifische und multimodale Daten unerlässlich.</p>
-                
-                <div class="grid md:grid-cols-2 gap-6">
-                    <div class="card bg-stone-50 p-6 rounded-lg border border-stone-200">
-                        <h4 class="text-xl font-semibold text-teal-700 mb-2">1. Neuronale Aktivitätsdaten (direkt vom Gehirn)</h4>
-                        <ul class="list-disc list-inside space-y-1 text-sm text-stone-600">
-                            <li><strong>EEG/MEG-Daten:</strong> Messungen der elektrischen/magnetischen Aktivität des Gehirns zur Identifizierung von Mustern, die mit kognitiven Zuständen, Gedächtnisabruf oder pathologischen Hirnwellen (z.B. verlangsamte Rhythmen) assoziiert sind. <em>Neuralink wäre hier der primäre Sensor für diese Daten in hochauflösender Form.</em></li>
-                            <li><strong>Spike-Daten (von einzelnen Neuronen oder Neuronengruppen):</strong> Mikroelektroden, wie sie Neuralink implantiert, können die Aktivität einzelner Neuronen aufzeichnen. Diese Daten sind entscheidend, um präzise neuronale Korrelate von Gedächtnisprozessen oder kognitiven Defiziten zu identifizieren.</li>
-                            <li><strong>LFP (Local Field Potentials):</strong> Messungen der Aktivität größerer Neuronengruppen, die Informationen über den Zustand lokaler Netzwerke liefern.</li>
-                        </ul>
-                        <p class="text-xs text-stone-500 mt-2"><strong>Wichtigkeit:</strong> Kern-Input für BCI, Identifikation pathologischer Muster, Dekodierung kognitiver Zustände, Steuerung von Interventionen.</p>
-                    </div>
-
-                    <div class="card bg-stone-50 p-6 rounded-lg border border-stone-200">
-                        <h4 class="text-xl font-semibold text-teal-700 mb-2">2. Bildgebende Daten des Gehirns</h4>
-                        <ul class="list-disc list-inside space-y-1 text-sm text-stone-600">
-                            <li><strong>MRT (strukturell, DTI):</strong> Hirnvolumen (Atrophie), neuronale Verbindungen.</li>
-                            <li><strong>fMRT:</strong> Hirnaktivität bei kognitiven Aufgaben, gestörte Netzwerke.</li>
-                            <li><strong>PET (Amyloid-, Tau-, FDG-PET):</strong> Diagnose, Stadieneinteilung, Stoffwechsel.</li>
-                        </ul>
-                        <p class="text-xs text-stone-500 mt-2"><strong>Wichtigkeit:</strong> Diagnose, Prognose, Verfolgung der Krankheitsprogression.</p>
-                    </div>
-
-                    <div class="card bg-stone-50 p-6 rounded-lg border border-stone-200">
-                        <h4 class="text-xl font-semibold text-teal-700 mb-2">3. Kognitive Testdaten</h4>
-                        <ul class="list-disc list-inside space-y-1 text-sm text-stone-600">
-                            <li>Ergebnisse neuropsychologischer Tests (MMSE, MoCA) zur Quantifizierung kognitiver Domänen.</li>
-                        </ul>
-                        <p class="text-xs text-stone-500 mt-2"><strong>Wichtigkeit:</strong> "Ground Truth" für Training, Verknüpfung neuronaler Muster mit Leistungen, Evaluation des Therapieerfolgs.</p>
-                    </div>
-                    
-                    <div class="card bg-stone-50 p-6 rounded-lg border border-stone-200">
-                        <h4 class="text-xl font-semibold text-teal-700 mb-2">4. Klinische Daten / Elektronische Gesundheitsakten (EGA)</h4>
-                        <ul class="list-disc list-inside space-y-1 text-sm text-stone-600">
-                            <li>Patientenanamnese, Krankheitsverlauf, Komorbiditäten, Medikation, Verhaltenssymptome (z.B. Apathie-Skalen), Laborwerte (Biomarker im Liquor oder Blut wie Beta-Amyloid, Tau-Proteine, Neurofilament light chain).</li>
-                        </ul>
-                         <p class="text-xs text-stone-500 mt-2"><strong>Wichtigkeit:</strong> Kontextuelle Informationen, Personalisierung, Prognoseverfeinerung.</p>
-                    </div>
-
-                    <div class="card bg-stone-50 p-6 rounded-lg border border-stone-200">
-                        <h4 class="text-xl font-semibold text-teal-700 mb-2">5. Genetische Daten</h4>
-                        <ul class="list-disc list-inside space-y-1 text-sm text-stone-600">
-                            <li>APOE-Genotyp (APOE &epsilon;4 als wichtiger Risikofaktor), andere Genvarianten, die mit Alzheimer oder Demenz assoziiert sind.</li>
-                        </ul>
-                        <p class="text-xs text-stone-500 mt-2"><strong>Wichtigkeit:</strong> Besonders wichtig für die Identifizierung von Hochrisikopatienten vor dem Ausbruch der Symptome.</p>
-                    </div>
-
-                    <div class="card bg-stone-50 p-6 rounded-lg border border-stone-200">
-                        <h4 class="text-xl font-semibold text-teal-700 mb-2">6. Umwelt- & Lebensstildaten (indirekt relevant)</h4>
-                        <ul class="list-disc list-inside space-y-1 text-sm text-stone-600">
-                            <li>Schlafdaten, Aktivitätslevel, Ernährungsverhalten, soziale Interaktion.</li>
-                        </ul>
-                        <p class="text-xs text-stone-500 mt-2"><strong>Wichtigkeit:</strong> Können indirekt Einfluss auf die kognitive Gesundheit haben und für präventive Ansätze wichtig sein.</p>
-                    </div>
+            <div class="relative z-10 flex flex-col md:flex-row items-start gap-8">
+                <div class="md:w-1/3 w-full h-screen flex-shrink-0 order-last desktop-image-container">
+                  <img src="bilder/map.png" alt="Weltkarte Desktop" class="w-full h-full object-cover rounded-lg shadow-md">
                 </div>
-                <p class="text-stone-700 mt-6">
-                    Die <strong>multimodale Integration</strong> all dieser Daten erlaubt der KI, ein ganzheitliches Modell der Krankheit und ihrer Progression aufzubauen und komplexe Korrelationen zu erkennen.
-                </p>
+
+                <div class="md:w-2/3 w-full">
+                    <div class="text-center md:text-left mb-12">
+                      <h1 class="main-page-title">Einleitung – Die globale Herausforderung</h1>
+                        <h2>
+                            Demenzerkrankungen, allen voran die Alzheimer-Krankheit, gehören zu den größten gesundheitlichen Herausforderungen unserer alternden Weltbevölkerung. Dieses Segment beleuchtet die aktuelle Situation und die prognostizierte Entwicklung.
+                        </h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto md:mx-0">
+                        <div class="flex flex-col items-center text-center p-6 bg-purple-800 bg-opacity-70 rounded-xl shadow-lg">
+                            <i class="fas fa-users icon"></i> <div class="text-6xl font-extrabold mb-2">55M+</div>
+                            <h3 class="mb-2">Betroffene weltweit</h3>
+                            <p class="text-secondary">Über 55 Millionen Menschen waren 2021 betroffen.<sup><a href="#source-1">[1]</a></sup></p>
+                        </div>
+                        <div class="flex flex-col items-center text-center p-6 bg-purple-800 bg-opacity-70 rounded-xl shadow-lg">
+                            <i class="fas fa-chart-line icon"></i> <div class="text-6xl font-extrabold mb-2">139M</div>
+                            <h3 class="mb-2">Prognose bis 2050</h3>
+                            <p class="text-secondary">Eine Verdreifachung der Fälle wird erwartet.<sup><a href="#source-1">[1]</a></sup></p>
+                        </div>
+                        <div class="flex flex-col items-center text-center p-6 bg-purple-800 bg-opacity-70 rounded-xl shadow-lg">
+                            <i class="fas fa-plus-circle icon"></i> <div class="text-6xl font-extrabold mb-2">10M</div>
+                            <h3 class="mb-2">Neuerkrankungen jährlich</h3>
+                            <p class="text-secondary">Jedes Jahr kommen etwa 10 Millionen neue Fälle hinzu.<sup><a href="#source-1">[1]</a></sup></p>
+                        </div>
+                        <div class="flex flex-col items-center text-center p-6 bg-purple-800 bg-opacity-70 rounded-xl shadow-lg">
+                            <i class="fas fa-dollar-sign icon"></i> <div class="text-6xl font-extrabold mb-2">$1.3T</div>
+                            <h3 class="mb-2">Globale Kosten (2019)</h3>
+                            <p class="text-secondary">Die Kosten beliefen sich 2019 auf rund 1,3 Milliarden US-Dollar. Prognostiziert auf 1,7 bis 2,8 Milliarden US-Dollar bis 2030.<sup><a href="#source-2">[2]</a></sup></p>
+                        </div>
+                    </div>
+                    <p class="relative z-10 mt-12 max-w-4xl mx-auto md:mx-0 text-center md:text-left">
+                        Alzheimer und Demenz stellen eine massive globale Herausforderung dar, gekennzeichnet durch progressive Verschlechterung kognitiver Funktionen und Verlust der Selbstständigkeit. Alzheimer macht rund 60-70% aller Fälle aus.<sup><a href="#source-8">[8]</a></sup> und etwa 75 % der Fälle weltweit bleiben undiagnostiziert.<sup><a href="#source-2">[2]</a></sup>
+                    </p>
+                </div>
             </div>
         </section>
 
-        <section id="ethik" class="content-section mb-16">
-            <div class="bg-white p-8 rounded-xl shadow-lg">
-                <h2 class="text-3xl font-bold text-teal-700 mb-4">Datenquellen, Datenschutz & Ethische Herausforderungen</h2>
-                <p class="text-stone-700 mb-6">Der ethische und datenschutzkonforme Umgang mit hochsensiblen Brain-Data und Gesundheitsinformationen ist bei BCI-Anwendungen von größter Bedeutung.</p>
+        <section id="problemstellung" class="mb-20 py-12 px-6 md:px-12 bg-purple-900 bg-opacity-50">
+            <div class="text-center mb-12">
+                <h1 class="main-page-title">BCI als Lösungsansatz: <br>
+                Wiederherstellung kognitiver Funktionen</h1>
+                <h2>
+                    <br>
+                    Die primäre Problemstellung, die eine fortgeschrittene Gehirn-Computer-Schnittstelle (BCI) wie Neuralink bei Alzheimer und Demenz adressieren könnte, ist die progressive Verschlechterung der kognitiven Funktionen und die daraus resultierende Einschränkung der Selbstständigkeit und Lebensqualität der Betroffenen.<sup><a href="#source-6">[6]</a></sup>
+                </h2>
+            </div>
 
-                <div class="mb-6">
-                    <h3 class="text-2xl font-semibold text-teal-600 mb-3">Mögliche Datenquellen:</h3>
-                    <ul class="list-disc list-inside space-y-1 text-sm text-stone-600">
-                        <li>Klinische Studien mit BCI-Implantaten (primäre und derzeit einzige Quelle für direkte neuronale Aktivitätsdaten).</li>
-                        <li>Universitätskliniken und Forschungseinrichtungen (Kohortenstudien zu Alzheimer und Demenz mit umfangreichen multimodalen Daten).</li>
-                        <li>Nationale & internationale Demenzregister (z.B. ADNI, Euro-ADNI) bieten große, standardisierte Datensätze.</li>
-                        <li>Neurologische Spezialpraxen (zukünftig, mit expliziter Patienteneinwilligung).</li>
-                        <li>Post-Mortem-Hirngewebe-Banken (für Korrelation von neuronalen Aktivitäten und pathologischen Veränderungen).</li>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+                <div class="grid-item">
+                    <i class="fas fa-brain icon"></i> <h3 class="mb-2">Gedächtnisverlust</h3>
+                    <p class="text-secondary">Verlust des Kurz- und Langzeitgedächtnisses, beeinträchtigt die Alltagsbewältigung.<sup><a href="#source-9">[9]</a></sup> Stabilisierung und Wiederherstellung von Kurz- und Langzeitgedächtnis.</p>
+                </div>
+                <div class="grid-item">
+                    <i class="fas fa-lightbulb icon"></i> <h3 class="mb-2">Kognitive Defizite</h3>
+                    <p class="text-secondary">Schwierigkeiten bei Problemlösung, Entscheidungsfindung, Orientierung und der Ausführung komplexer Aufgaben.<sup><a href="#source-9">[9]</a></sup> Verbesserung von Problemlösung, Entscheidungsfindung und Orientierung.</p>
+                </div>
+                <div class="grid-item">
+                    <i class="fas fa-comments icon"></i> <h3 class="mb-2">Kommunikation</h3>
+                    <p class="text-secondary">Erhebliche Sprach- und Kommunikationsschwierigkeiten im fortgeschrittenen Stadium.<sup><a href="#source-9">[9]</a></sup> Wiederherstellung der Kommunikationsfähigkeit.</p>
+                </div>
+                <div class="grid-item">
+                    <i class="fas fa-walking icon"></i> <h3 class="mb-2">Selbstständigkeit</h3>
+                    <p class="text-secondary">Patienten werden zunehmend pflegebedürftig und verlieren die Fähigkeit, eigenständig zu leben.<sup><a href="#source-9">[9]</a></sup> Unterstützung zur Erhaltung der Autonomie.</p>
+                </div>
+                <div class="grid-item md:col-span-2">
+                    <i class="fas fa-frown-open icon"></i> <h3 class="mb-2">Emotionale &amp; Verhaltensstörungen</h3>
+                    <p class="text-secondary">Depressionen, Angstzustände, Aggressionen und Apathie sind häufige Begleiterscheinungen.<sup><a href="#source-9">[9]</a></sup></p>
+                </div>
+            </div>
+            <p class="mt-12 max-w-4xl mx-auto text-center">
+                Das Ziel der BCI-Anwendung ist es, kognitive Funktionen zu stabilisieren, wiederherstellen oder zu kompensieren, um Patienten eine höhere Lebensqualität und längere Selbstständigkeit zu ermöglichen. Dies könnte die Modulation neuronaler Netzwerke oder die Schaffung einer Schnittstelle zur Unterstützung kognitiver Prozesse (z.B. Gedächtnisstützen) bedeuten.<sup><a href="#source-6">[6]</a></sup>
+            </p>
+        </section>
+
+        <section id="therapien" class="mb-20 py-12 px-6 md:px-12">
+            <h1 class="main-page-title">Medizinische Fortschritte &amp; Grenzen – Therapien &amp; Prävention</h1>
+            <h2> <br>
+              Die medizinische Forschung erzielt Fortschritte bei der Behandlung und Prävention von Alzheimer, doch es bleiben Herausforderungen.<br>
+            </h2>
+            <p>&nbsp;</p>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-7xl mx-auto">
+        <div class="grid-item items-start text-left">
+            <div class="section-heading-with-icon">
+                <i class="fas fa-pills icon"></i>
+                <h3 class="mb-2">Neue Therapien – Ein Hoffnungsschimmer:</h3>
+          </div>
+            <ul class="list-disc list-outside space-y-2 pl-6">
+                <li class="list-item-with-icon"><i class="fas fa-flask icon"></i><span>Erstmals Hoffnung auf krankheitsmodifizierende Behandlungen, die direkt auf die Alzheimer-Pathologie (Beta-Amyloid-Plaques) abzielen.<sup><a href="#source-4">[4]</a></sup></span></li>
+                <li class="list-item-with-icon"><i class="fas fa-prescription-bottle-alt icon"></i><span>Aducanumab (2021, USA) war die erste zugelassene medikamentöse Therapie.<sup><a href="#source-4">[4]</a></sup></span></li>
+                <li class="list-item-with-icon"><i class="fas fa-chart-bar icon"></i><span>Lecanemab (Legembi, 2023) reduzierte in Studien Amyloid-Ablagerungen und verlangsamte den kognitiven Abbau bei frühem Alzheimer moderat um rund 27% über 18 Monate.<sup><a href="#source-4">[4]</a></sup></span></li>
+                <li class="list-item-with-icon"><i class="fas fa-vial icon"></i><span>Weitere Wirkstoffe (z.B. Antikörper gegen Tau-Proteine, entzündungshemmende Ansätze) sind in Entwicklung.<sup><a href="#source-10">[10]</a></sup></span></li>
+            </ul>
+        </div>
+        <div class="grid-item items-start text-left">
+            <div class="section-heading-with-icon">
+                <i class="fas fa-exclamation-triangle icon"></i>
+                <h3 class="mb-2">Risiken und Grenzen der Therapien:</h3>
+          </div>
+            <ul class="list-disc list-outside space-y-2 pl-6">
+                <li class="list-item-with-icon"><i class="fas fa-times-circle icon"></i><span>Bislang keine Heilung in Sicht; begrenzter Nutzen und Nebenwirkungen (sogenannte ARIA-Effekte: Hirnödeme, Mikroblutungen).<sup><a href="#source-4">[4]</a></sup></span></li>
+                <li class="list-item-with-icon"><i class="fas fa-money-bill-wave icon"></i><span>Extrem kostspielig (Lecanemab ca. 26.500 US$/Jahr in den USA).<sup><a href="#source-4">[4]</a></sup></span></li>
+                <li class="list-item-with-icon"><i class="fas fa-globe-americas icon"></i><span>Risiko globaler Ungleichheit im Zugang und Überlastung der Diagnostik ("Diagnose-Tsunami").<sup><a href="#source-4">[4]</a></sup></span></li>
+            </ul>
+        </div>
+        <div class="grid-item items-start text-left lg:col-span-2">
+            <div class="section-heading-with-icon">
+                <i class="fas fa-shield-alt icon"></i>
+                <h3 class="mb-2">Prävention &amp; Risikofaktoren:</h3>
+          </div>
+            <ul class="list-disc list-outside space-y-2 pl-6">
+                <li class="list-item-with-icon"><i class="fas fa-percent icon"></i><span>Ein erheblicher Teil der Demenzfälle (40-45%) könnte durch vorbeugende Maßnahmen hinausgezögert oder sogar verhindert werden.<sup><a href="#source-3">[3]</a></sup></span></li>
+                <li class="list-item-with-icon"><i class="fas fa-list-alt icon"></i><span>Die Lancet-Kommission 2020/2024 identifizierte 12-14 modifizierbare Risikofaktoren (z.B. niedrige Bildung, Hörverlust, Bluthochdruck, Diabetes, soziale Isolation, Rauchen, Luftverschmutzung).<sup><a href="#source-3">[3]</a></sup></span></li>
+                <li class="list-item-with-icon"><i class="fas fa-leaf icon"></i><span>Chancen durch multimodale Lebensstil-Interventionen (FINGER-Studie, Finnland).<sup><a href="#source-5">[5]</a></sup></span></li>
+                <li class="list-item-with-icon"><i class="fas fa-hand-paper icon"></i><span>Herausforderungen in der Prävention: Viele Risikofaktoren hängen mit gesellschaftlichen Bedingungen zusammen; Risiko unzureichender Umsetzung in Entwicklungs- und Schwellenländern.<sup><a href="#source-3">[3]</a></sup></span></li>
+            </ul>
+        </div>
+      </div>
+        </section>
+
+        <section id="diagnostik" class="mb-20 py-12 px-6 md:px-12 bg-purple-900 bg-opacity-50">
+            <h1 class="main-page-title">Medizinische Fortschritte – <br>
+            Früherkennung &amp; KI-Diagnostik</h1>
+            <h2> <br>
+            Fortschritte in der Diagnostik eröffnen neue Chancen, Demenz deutlich früher und leichter festzustellen, insbesondere durch den Einsatz von KI.</h2>
+          <p>&nbsp;</p>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-7xl mx-auto">
+        <div class="grid-item items-start text-left">
+            <div class="section-heading-with-icon">
+                <i class="fas fa-search icon"></i>
+                <h3 class="mb-2">Früherkennung &amp; Diagnostik – Neue Chancen:</h3>
+            </div>
+            <ul class="list-disc list-outside space-y-2 pl-6">
+                <li class="list-item-with-icon"><i class="fas fa-tint icon"></i><span>Bluttests: Ein Meilenstein ist die Entwicklung von Biomarker-Bluttests. Im Mai 2025 wurde ein Bluttest (Lumipulse G pTau/Aß42) von der US-Gesundheitsbehörde FDA zugelassen, der Alzheimer-typische Proteine im Plasma misst und Amyloid-Plaques im Gehirn mit hoher Wahrscheinlichkeit erkennt, ohne kostspielige PET-Scans oder invasive Lumbalpunktionen.<sup><a href="#source-4">[4]</a></sup></span></li>
+                <li class="list-item-with-icon"><i class="fas fa-x-ray icon"></i><span>Bildgebende Verfahren: PET-Tracer für Amyloid und Tau sowie neue MRT-Sequenzen ermöglichen eine immer frühere und spezifischere Diagnose.<sup><a href="#source-11">[11]</a></sup></span></li>
+                <li class="list-item-with-icon"><i class="fas fa-clipboard-list icon"></i><span>Verbesserte neuropsychologische Tests erfassen beginnende kognitive Störungen sensitiver.<sup><a href="#source-11">[11]</a></sup></span></li>
+            </ul>
+        </div>
+        <div class="grid-item items-start text-left">
+            <div class="section-heading-with-icon">
+                <i class="fas fa-robot icon"></i>
+                <h3 class="mb-2">Innovationen durch KI-gestützte Diagnostik:</h3>
+            </div>
+            <ul class="list-disc list-outside space-y-2 pl-6">
+                <li class="list-item-with-icon"><i class="fas fa-microchip icon"></i><span>KI wird zu einem vielversprechenden Werkzeug in der Früherkennung von Demenz.</span></li>
+                <li class="list-item-with-icon"><i class="fas fa-microphone-alt icon"></i><span>Sprachmusteranalyse: KI-Algorithmen erkennen subtile Anzeichen von kognitivem Abbau in Alltagsdaten. Eine Studie zeigte hohe Genauigkeit bei der Unterscheidung von gesunden und kognitiv beeinträchtigten Personen anhand kurzer Sprachanalysen.<sup><a href="#source-7">[7]</a></sup></span></li>
+                <li class="list-item-with-icon"><i class="fas fa-brain icon"></i><span>Gehirnscan-Analyse: KI wird eingesetzt, um Muster in Gehirnscans zu detektieren, die für Alzheimer typisch sind, teils Jahre vor der klinischen Diagnose.<sup><a href="#source-7">[7]</a></sup></span></li>
+                <li class="list-item-with-icon"><i class="fas fa-check-circle icon"></i><span>Vorteile der KI-Diagnostik: Schneller, objektiver und flächendeckender, wichtig bei begrenzter Zahl von Fachärzten.<sup><a href="#source-7">[7]</a></sup></span></li>
+            </ul>
+        </div>
+        <div class="grid-item items-start text-left lg:col-span-2">
+            <div class="section-heading-with-icon">
+                <i class="fas fa-radiation-alt icon"></i>
+                <h3 class="mb-2">Risiken in der Diagnostik:</h3>
+            </div>
+            <ul class="list-disc list-outside space-y-2 pl-6">
+                <li class="list-item-with-icon"><i class="fas fa-sad-tear icon"></i><span>Frühe Diagnose kann psychisch belastend sein, solange keine heilende Therapie verfügbar ist.<sup><a href="#source-12">[12]</a></sup></span></li>
+                <li class="list-item-with-icon"><i class="fas fa-hospital-alt icon"></i><span>Gefahr einer Überlastung der Gesundheitsversorgung durch einen "Diagnose-Tsunami".<sup><a href="#source-12">[12]</a></sup></span></li>
+                <li class="list-item-with-icon"><i class="fas fa-user-md icon"></i><span>Mangel an Fachärzten und Demenzambulanzen, insbesondere in ländlichen und ärmeren Regionen.<sup><a href="#source-12">[12]</a></sup></span></li>
+                <li class="list-item-with-icon"><i class="fas fa-question-circle icon"></i><span>Genauigkeit neuer Tests: Risiko von falsch-positiven oder falsch-negativen Befunden.<sup><a href="#source-12">[12]</a></sup></span></li>
+            </ul>
+        </div>
+      </div>
+      </section>
+
+        <section id="daten" class="mb-20 py-12 px-6 md:px-12 relative overflow-hidden">
+            <img src="bilder/lrtvJCHpTrnRySBcI6YjE.jpg" alt="Daten Fundament Mobile" class="mobile-image-band md:hidden">
+
+            <div class="relative z-10 flex flex-col md:flex-row items-start gap-8">
+                <div class="md:w-1/3 w-full h-screen flex-shrink-0 order-first desktop-image-container">
+                  <img src="bilder/lrtvJCHpTrnRySBcI6YjE.jpg" alt="Daten Fundament Desktop" class="w-full h-full object-cover rounded-lg shadow-md">
+                </div>
+
+                <div class="md:w-2/3 w-full">
+                    <div class="text-center md:text-left mb-12">
+                        <h1 class="main-page-title">Daten als Fundament <br>
+                        für KI &amp; BCI</h1>
+                        <h2>
+                            <br>
+                            Für die Entwicklung einer KI-Anwendung mittels Neuralink zur Unterstützung bei Alzheimer und Demenz sind hochspezifische und multimodale Daten unerlässlich.<sup><a href="#source-13">[13]</a></sup>
+                        </h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12 max-w-6xl mx-auto md:mx-0">
+                        <div class="grid-item items-start text-left">
+                            <i class="fas fa-notes-medical icon"></i>
+                            <h2 class="mb-2">Klinische Daten</h2>
+                            <p class="text-secondary">
+                                Anamnese, Krankheitsverlauf, Komorbiditäten, Medikation, Verhaltenssymptome und Laborwerte (Biomarker wie Beta-Amyloid, Tau-Proteine, Neurofilament light chain) liefern wichtige Kontextinformationen für Personalisierung und Prognoseverfeinerung.<sup><a href="#source-13">[13]</a></sup>
+                            </p>
+                        </div>
+                        <div class="grid-item items-start text-left">
+                            <i class="fas fa-dna icon"></i>
+                            <h2 class="mb-2">Genetische Daten</h2>
+                            <p class="text-secondary">
+                                APOE-Genotyp (APOE ε4 als wichtiger Risikofaktor), andere Genvarianten, die mit Alzheimer oder Demenz assoziiert sind, sind entscheidend für die Identifizierung von Hochrisikopatienten vor dem Ausbruch der Symptome.<sup><a href="#source-13">[13]</a></sup>
+                            </p>
+                        </div>
+                        <div class="grid-item items-start text-left lg:col-span-2">
+                            <i class="fas fa-leaf icon"></i>
+                            <h2 class="mb-2">Umwelt- &amp; Lebensstildaten</h2>
+                            <p class="text-secondary">
+                                Schlafdaten, Aktivitätslevel, Ernährungsverhalten, soziale Interaktion können indirekt Einfluss auf die kognitive Gesundheit haben und für präventive Ansätze wichtig sein.<sup><a href="#source-13">[13]</a></sup>
+                            </p>
+                        </div>
+                    </div>
+                    <p class="mt-8 text-center md:text-left">
+                        Die multimodale Integration all dieser Daten erlaubt der KI, ein ganzheitliches Modell der Krankheit und ihrer Progression aufzubauen und komplexe Korrelationen zu erkennen.
+                    </p>
+                </div>
+            </div>
+
+            <div class="relative z-10 text-center mt-16 mb-12">
+                <h3 class="main-page-title">Datenquellen, Datenschutz &amp; Ethische Herausforderungen</h3>
+                <p class="mb-8 max-w-4xl mx-auto">
+                  <br>
+                Der ethische und datenschutzkonforme Umgang mit hochsensiblen Brain-Data und Gesundheitsinformationen ist bei BCI-Anwendungen von größter Bedeutung. </p>
+            </div>
+
+            <div class="relative z-10 grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+                <div class="grid-item items-start text-left">
+                    <div class="section-heading-with-icon">
+                        <i class="fas fa-database icon"></i>
+                        <h3 class="mb-2">Mögliche Datenquellen:</h3>
+                    </div>
+                    <ul class="list-disc list-outside space-y-1 pl-6">
+                        <li class="list-item-with-icon"><i class="fas fa-hospital icon"></i><span>Klinische Studien mit BCI-Implantaten (primäre und derzeit einzige Quelle für direkte neuronale Aktivitätsdaten).<sup><a href="#source-6">[6]</a></sup></span></li>
+                        <li class="list-item-with-icon"><i class="fas fa-university icon"></i><span>Universitätskliniken und Forschungseinrichtungen (Kohortenstudien zu Alzheimer und Demenz).</span></li>
+                        <li class="list-item-with-icon"><i class="fas fa-registered icon"></i><span>Nationale &amp; internationale Demenzregister (z.B. ADNI, Euro-ADNI) bieten große, standardisierte Datensätze.<sup><a href="#source-7">[7]</a></sup></span></li>
+                        <li class="list-item-with-icon"><i class="fas fa-clinic-medical icon"></i><span>Neurologische Spezialpraxen (zukünftig, mit expliziter Patienteneinwilligung).</span></li>
+                        <li class="list-item-with-icon"><i class="fas fa-skull-crossbones icon"></i><span>Post-Mortem-Hirngewebe-Banken (für Korrelation von neuronalen Aktivitäten und pathologischen Veränderungen).</span></li>
                     </ul>
                 </div>
-                
-                <div class="accordion-item mb-4 border border-stone-200 rounded-lg">
-                    <button class="accordion-header w-full text-left px-6 py-4 bg-stone-50 hover:bg-stone-100 focus:outline-none rounded-t-lg">
-                        <span class="text-xl font-semibold text-teal-700">Datenschutzmaßnahmen (DSGVO-Konformität & darüber hinaus)</span>
-                        <span class="float-right transform transition-transform duration-300">&#x25BC;</span>
-                    </button>
-                    <div class="accordion-content px-6 py-4 bg-white rounded-b-lg">
-                        <ul class="list-disc list-inside space-y-2 text-sm text-stone-600">
-                            <li><strong>Informierte Einwilligung:</strong> Umfassend, detailliert und wiederholt eingeholt.</li>
-                            <li><strong>Anonymisierung/Pseudonymisierung:</strong> Maximale Sicherheit, strenge Zugangskontrollen.</li>
-                            <li><strong>"Right to be forgotten" / Datenlöschung:</strong> Patientenrecht muss gewährleistet sein.</li>
-                            <li><strong>Datensparsamkeit:</strong> Nur absolut notwendige Daten sammeln und verarbeiten.</li>
-                            <li><strong>Robuste Sicherheitsarchitektur:</strong> End-to-End-Verschlüsselung, Mehrfaktor-Authentifizierung, Sicherheitsaudits.</li>
-                            <li><strong>Transparenz über Datennutzung:</strong> Klare Information für Patienten.</li>
-                        </ul>
+                <div class="grid-item items-start text-left">
+                    <div class="section-heading-with-icon">
+                        <i class="fas fa-lock icon"></i>
+                        <h3 class="mb-2">Datenschutz-maßnahmen (DSGVO-Konformität &amp; darüber hinaus)</h3>
                     </div>
+                    <ul class="list-disc list-outside space-y-1 pl-6">
+                        <li class="list-item-with-icon"><i class="fas fa-file-contract icon"></i><span>Informierte Einwilligung: Umfassend, detailliert und wiederholt eingeholt.<sup><a href="#source-14">[14]</a></sup></span></li>
+                        <li class="list-item-with-icon"><i class="fas fa-user-secret icon"></i><span>Anonymisierung/Pseudonymisierung: Maximale Sicherheit, strenge Zugangskontrollen.<sup><a href="#source-14">[14]</a></sup></span></li>
+                        <li class="list-item-with-icon"><i class="fas fa-eraser icon"></i><span>"Right to be forgotten" / Datenlöschung: Patientenrecht muss gewährleistet sein.<sup><a href="#source-14">[14]</a></sup></span></li>
+                        <li class="list-item-with-icon"><i class="fas fa-piggy-bank icon"></i><span>Datensparsamkeit: Nur absolut notwendig Daten sammeln und verarbeiten.<sup><a href="#source-14">[14]</a></sup></span></li>
+                        <li class="list-item-with-icon"><i class="fas fa-shield-alt icon"></i><span>Robuste Sicherheitsarchitektur: End-to-End-Verschlüsselung, Mehrfaktor-Authentifizierung, Sicherheitsaudits.<sup><a href="#source-14">[14]</a></sup></span></li>
+                        <li class="list-item-with-icon"><i class="fas fa-info-circle icon"></i><span>Transparenz über Datennutzung: Klare Information für Patienten.<sup><a href="#source-14">[14]</a></sup></span></li>
+                    </ul>
                 </div>
-
-                <div class="accordion-item border border-stone-200 rounded-lg">
-                    <button class="accordion-header w-full text-left px-6 py-4 bg-stone-50 hover:bg-stone-100 focus:outline-none rounded-t-lg">
-                        <span class="text-xl font-semibold text-teal-700">Ethische Herausforderungen (spezifisch für BCI & Demenz)</span>
-                        <span class="float-right transform transition-transform duration-300">&#x25BC;</span>
-                    </button>
-                    <div class="accordion-content px-6 py-4 bg-white rounded-b-lg">
-                        <ul class="list-disc list-inside space-y-2 text-sm text-stone-600">
-                            <li><strong>"Brain Privacy" / Mentale Privatsphäre:</strong> Schutz vor Auslesen von Gedanken/Emotionen.</li>
-                            <li><strong>Autonomie & Entscheidungsfähigkeit:</strong> Einwilligung bei fortgeschrittener Demenz.</li>
-                            <li><strong>Identität & Persönlichkeit:</strong> Mögliche Veränderungen durch Hirnstimulation.</li>
-                            <li><strong>Bias & Fairness:</strong> Zugangsgerechtigkeit, repräsentative Trainingsdaten.</li>
-                            <li><strong>Überwachung & Kontrolle:</strong> Missbrauchspotenzial durch dauerhafte Hirnüberwachung.</li>
-                            <li><strong>Verantwortlichkeit bei Fehlfunktionen:</strong> Wer haftet bei Schäden durch die BCI?</li>
-                            <li><strong>Klinische Wirksamkeit vs. invasiver Eingriff:</strong> Nutzen-Risiko-Abwägung.</li>
-                        </ul>
+                <div class="grid-item items-start text-left">
+                    <div class="section-heading-with-icon">
+                        <i class="fas fa-balance-scale icon"></i>
+                        <h3 class="mb-2">Ethische Heraus-forderungen (spezifisch für BCI &amp; Demenz)</h3>
                     </div>
+                    <ul class="list-disc list-outside space-y-1 pl-6">
+                        <li class="list-item-with-icon"><i class="fas fa-user-lock icon"></i><span>"Brain Privacy" / Mentale Privatsphäre: Schutz vor Auslesen von Gedanken/Emotionen.<sup><a href="#source-15">[15]</a></sup></span></li>
+                        <li class="list-item-with-icon"><i class="fas fa-hand-holding-heart icon"></i><span>Autonomie &amp; Entscheidungsfähigkeit: Einwilligung bei fortgeschrittener Demenz.<sup><a href="#source-15">[15]</a></sup></span></li>
+                        <li class="list-item-with-icon"><i class="fas fa-id-badge icon"></i><span>Identität &amp; Persönlichkeit: Mögliche Veränderungen durch Hirnstimulation.<sup><a href="#source-15">[15]</a></sup></span></li>
+                        <li class="list-item-with-icon"><i class="fas fa-users-slash icon"></i><span>Bias &amp; Fairness: Zugangsgerechtigkeit, repräsentative Trainingsdaten.<sup><a href="#source-15">[15]</a></sup></span></li>
+                        <li class="list-item-with-icon"><i class="fas fa-eye icon"></i><span>Überwachung &amp; Kontrolle: Missbrauchspotenzial durch dauerhafte Hirnüberwachung.<sup><a href="#source-15">[15]</a></sup></span></li>
+                        <li class="list-item-with-icon"><i class="fas fa-gavel icon"></i><span>Verantwortlichkeit bei Fehlfunktionen: Wer haftet bei Schäden durch die BCI?<sup><a href="#source-15">[15]</a></sup></span></li>
+                        <li class="list-item-with-icon"><i class="fas fa-medkit icon"></i><span>Klinische Wirksamkeit vs. invasiver Eingriff: Nutzen-Risiko-Abwägung.<sup><a href="#source-15">[15]</a></sup></span></li>
+                    </ul>
                 </div>
             </div>
         </section>
 
-        <section id="ki-entwicklung" class="content-section mb-16">
-            <div class="bg-white p-8 rounded-xl shadow-lg">
-                <h2 class="text-3xl font-bold text-teal-700 mb-4">Der KI-Entwicklungsprozess: Training & Qualität</h2>
-                <p class="text-stone-700 mb-6">Die Entwicklung einer KI für Alzheimer/Demenz mit einer BCI ist hochkomplex und erfordert spezialisierte Ansätze.</p>
+        <section id="ki-entwicklung" class="mb-20 py-12 px-6 md:px-12 relative overflow-hidden">
+            <img alt="KI Entwicklung Mobile" class="mobile-image-band md:hidden">
 
-                <h3 class="text-2xl font-semibold text-teal-600 mb-3">Trainingsmethoden der KI:</h3>
-                <ul class="list-none space-y-3 mb-6 text-stone-700">
-                    <li>
-                        <strong class="text-teal-700">Überwachtes Lernen (primärer Ansatz):</strong>
-                        <p class="text-sm ml-4">Die KI lernt, aus den neuronalen und multimodalen Daten Muster zu erkennen, die mit spezifischen kognitiven Zuständen, Gedächtnisabrufen, der Progression der Demenz oder dem Ansprechen auf Stimulation korrelieren.</p>
-                    </li>
-                    <li>
-                        <strong class="text-teal-700">Reinforcement Learning (Verstärkendes Lernen):</strong>
-                        <p class="text-sm ml-4">Könnte eine entscheidende Rolle für die kontinuierliche Anpassung der neuronalen Stimulation durch die BCI spielen. Die KI erhält "Belohnungen" für Stimulationen, die den gewünschten Effekt erzielen.</p>
-                    </li>
-                     <li>
-                        <strong class="text-teal-700">Unüberwachtes Lernen:</strong>
-                        <p class="text-sm ml-4">Kann verwendet werden, um in den riesigen Datenmengen von neuronaler Aktivität unbekannte Muster oder Subtypen von Demenz zu entdecken (z.B. mittels Cluster-Analyse).</p>
-                    </li>
-                     <li>
-                        <strong class="text-teal-700">Federated Learning:</strong>
-                        <p class="text-sm ml-4">Könnte eingesetzt werden, um Modelle über Daten von verschiedenen Krankenhäusern zu trainieren, ohne dass die Rohdaten die Einrichtung verlassen müssen, um den Datenschutz zu erhöhen.</p>
-                    </li>
-                    <li>
-                        <strong class="text-teal-700">Genutzte Algorithmen:</strong>
-                        <p class="text-sm ml-4">Recurrent Neural Networks (RNNs) wie LSTMs/GRUs für die Verarbeitung sequenzieller neuronaler Daten; Convolutional Neural Networks (CNNs) für die Analyse von Bilddaten.</p>
-                    </li>
-                </ul>
+            <div class="relative z-10 flex flex-col md:flex-row items-start gap-8">
+                <div class="md:w-1/3 w-full h-screen flex-shrink-0 order-last desktop-image-container">
+                  <img src="bilder/dGtQV4ylbw3jqpfRPAw1f.jpg" alt="KI Entwicklung Desktop" class="w-full h-full object-cover rounded-lg shadow-md">
+                </div>
 
-                <h3 class="text-2xl font-semibold text-teal-600 mb-3">Einfluss der Datenqualität auf Genauigkeit und Zuverlässigkeit:</h3>
-                <ul class="list-disc list-inside space-y-2 mb-6 text-sm text-stone-600">
-                    <li><strong>Rauschen und Artefakte:</strong> (z.B. Muskelaktivität, technische Störungen) in neuronalen Daten führen zu unzuverlässiger KI-Analyse.</li>
-                    <li><strong>Unvollständigkeit, fehlende Daten, falsche Labels/Diagnosen</strong> oder <strong>Bias in den Trainingsdaten</strong> können die Vorhersagegenauigkeit und Robustheit der KI erheblich beeinträchtigen.</li>
-                </ul>
-                <h3 class="text-2xl font-semibold text-teal-600 mb-3">Kontinuierliche Verbesserung der Datenqualität:</h3>
-                <ul class="list-disc list-inside space-y-2 text-sm text-stone-600">
-                    <li>Automatisierte Artefakterkennung und -unterdrückung.</li>
-                    <li>Standardisierte Protokolle für die Datenerfassung über Studienzentren hinweg.</li>
-                    <li>Regelmäßige Kalibrierung und Validierung der Sensoren und des Implantats.</li>
-                    <li>Experten-Feedback und manuelle Verifikation zur Korrektur von Datenanomalien.</li>
-                    <li>Robuste Datenfusion und -integration, longitudinale Datenpflege.</li>
-                    <li>Aktives Lernen: KI fordert bei Unsicherheiten gezielt weitere Daten oder Expertenfeedback an.</li>
-                </ul>
+                <div class="md:w-2/3 w-full">
+                    <div class="text-center md:text-left mb-12">
+                        <h1 class="main-page-title">Der KI-Entwicklungsprozess: Training &amp; Qualität</h1>
+                        <h2>
+                          <br>
+                        Die Entwicklung einer KI für Alzheimer/Demenz mit einer BCI ist hochkomplex und erfordert spezialisierte Ansätze. </h2>
+                    </div>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto md:mx-0">
+                        <div class="grid-item items-start text-left">
+                            <div class="section-heading-with-icon">
+                                <i class="fas fa-cogs icon"></i>
+                                <h3 class="mb-2">Trainings-methoden der KI:</h3>
+                            </div>
+                            <ul class="list-disc list-outside space-y-2 pl-6">
+                                <li class="list-item-with-icon"><i class="fas fa-user-graduate icon"></i><span>Überwachtes Lernen (primärer Ansatz): Die KI lernt, aus den neuronalen und multimodalen Daten Muster zu erkennen, die mit spezifischen kognitiven Zuständen, Gedächtnisabrufen, der Progression der Demenz oder dem Ansprechen auf Stimulation korrelieren.<sup><a href="#source-16">[16]</a></sup></span></li>
+                                <li class="list-item-with-icon"><i class="fas fa-trophy icon"></i><span>Reinforcement Learning (Verstärkendes Lernen): Könnte eine entscheidende Rolle für die kontinuierliche Anpassung der neuronalen Stimulation durch die BCI spielen. Die KI erhält "Belohnungen" für Stimulationen, die den gewünschten Effekt erzielen.<sup><a href="#source-16">[16]</a></sup></span></li>
+                                <li class="list-item-with-icon"><i class="fas fa-eye-slash icon"></i><span>Unüberwachtes Lernen: Kann verwendet werden, um in den riesigen Datenmengen von neuronaler Aktivität unbekannte Muster oder Subtypen von Demenz zu entdecken (z.B. mittels Cluster-Analyse).<sup><a href="#source-16">[16]</a></sup></span></li>
+                                <li class="list-item-with-icon"><i class="fas fa-network-wired icon"></i><span>Federated Learning: Könnte eingesetzt werden, um Modelle über Daten von verschiedenen Krankenhäusern zu trainieren, ohne dass die Rohdaten die Einrichtung verlassen müssen, um den Datenschutz zu erhöhen.<sup><a href="#source-17">[17]</a></sup></span></li>
+                                <li class="list-item-with-icon"><i class="fas fa-code-branch icon"></i><span>Genutzte Algorithmen: Recurrent Neural Networks (RNNs) wie LSTMs/GRUs für die Verarbeitung sequenzieller neuronaler Daten; Convolutional Neural Networks (CNNs) für die Analyse von Bilddaten.<sup><a href="#source-16">[16]</a></sup></span></li>
+                            </ul>
+                        </div>
+                        <div class="grid-item items-start text-left">
+                            <div class="section-heading-with-icon">
+                                <i class="fas fa-chart-pie icon"></i>
+                                <h3 class="mb-2">Einfluss der Datenqualität auf Genauigkeit und Zuverlässigkeit:</h3>
+                            </div>
+                            <ul class="list-disc list-outside space-y-2 pl-6">
+                                <li class="list-item-with-icon"><i class="fas fa-wave-square icon"></i><span>Rauschen und Artefakte: (z.B. Muskelaktivität, technische Störungen) in neuronalen Daten führen zu unzuverlässiger KI-Analyse.<sup><a href="#source-18">[18]</a></sup></span></li>
+                                <li class="list-item-with-icon"><i class="fas fa-bug icon"></i><span>Unvollständigkeit, fehlende Daten, falsche Labels/Diagnosen oder Bias in den Trainingsdaten können die Vorhersagegenauigkeit und Robustheit der KI erheblich beeinträchtigen.<sup><a href="#source-18">[18]</a></sup></span></li>
+                            </ul>
+                        </div>
+                        <div class="grid-item items-start text-left lg:col-span-2">
+                            <div class="section-heading-with-icon">
+                                <i class="fas fa-sync-alt icon"></i>
+                                <h3 class="mb-2">Kontinuierliche Verbesserung der Datenqualität:</h3>
+                            </div>
+                            <ul class="list-disc list-outside space-y-2 pl-6">
+                                <li class="list-item-with-icon"><i class="fas fa-filter icon"></i><span>Automatisierte Artefakterkennung und -unterdrückung.<sup><a href="#source-18">[18]</a></sup></span></li>
+                                <li class="list-item-with-icon"><i class="fas fa-clipboard-check icon"></i><span>Standardisierte Protokolle für die Datenerfassung über Studienzentren hinweg.<sup><a href="#source-18">[18]</a></sup></span></li>
+                                <li class="list-item-with-icon"><i class="fas fa-screwdriver-wrench icon"></i><span>Regelmäßige Kalibrierung und Validierung der Sensoren und des Implantats.<sup><a href="#source-18">[18]</a></sup></span></li>
+                                <li class="list-item-with-icon"><i class="fas fa-comments icon"></i><span>Experten-Feedback und manuelle Verifikation zur Korrektur von Datenanomalien.<sup><a href="#source-18">[18]</a></sup></span></li>
+                                <li class="list-item-with-icon"><i class="fas fa-layer-group icon"></i><span>Robuste Datenfusion und -integration, longitudinale Datenpflege.<sup><a href="#source-18">[18]</a></sup></span></li>
+                                <li class="list-item-with-icon"><i class="fas fa-lightbulb icon"></i><span>Aktives Lernen: KI fordert bei Unsicherheiten gezielt weitere Daten oder Expertenfeedback an.<sup><a href="#source-18">[18]</a></sup></span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <section id="weiterentwicklung" class="content-section mb-16">
-            <div class="bg-white p-8 rounded-xl shadow-lg">
-                <h2 class="text-3xl font-bold text-teal-700 mb-4">Kontinuierliche Weiterentwicklung der KI & Technologische Perspektive</h2>
-                <p class="text-stone-700 mb-6">Die Anpassungsfähigkeit und kontinuierliche Optimierung der KI sind entscheidend, da Alzheimer/Demenz progressive Erkrankungen sind und die Forschung ständig neue Erkenntnisse liefert.</p>
+        <section id="technologie" class="mb-20 py-12 px-6 md:px-12 bg-purple-900 bg-opacity-50">
+            <h1 class="main-page-title">Kontinuierliche Weiterentwicklung der KI <br>
+            &amp; Technologische Perspektive</h1>
+            <h2> <br>
+            Die Anpassungsfähigkeit und kontinuierliche Optimierung der KI sind entscheidend, da Alzheimer/Demenz progressive Erkrankungen sind und die Forschung ständig neue Erkenntnisse liefert.</h2>
+          <p>&nbsp;</p>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-7xl mx-auto">
+        <div class="grid-item items-start text-left">
+            <div class="section-heading-with-icon">
+                <i class="fas fa-chart-line icon"></i>
+                <h3 class="mb-2">Nutzung neuer Daten aus der Praxis zur Optimierung:</h3>
+            </div>
+            <ul class="list-disc list-outside space-y-2 pl-6">
+                <li class="list-item-with-icon"><i class="fas fa-history icon"></i><span>Langzeit-Patientenverläufe mit BCI: Kontinuierliche Sammlung von Daten (neuronale Aktivität, kognitive Testscores, Verhaltensbeobachtungen) zur Wirksamkeitsüberwachung und Anpassung der Stimulationsparameter.<sup><a href="#source-19">[19]</a></sup></span></li>
+                <li class="list-item-with-icon"><i class="fas fa-user-md icon"></i><span>Feedback von Ärzten und Betreuern: Klinisches Feedback zur beobachteten Verbesserung und zur Usability/Akzeptanz der BCI-Schnittstelle.<sup><a href="#source-19">[19]</a></sup></span></li>
+                <li class="list-item-with-icon"><i class="fas fa-lightbulb icon"></i><span>Neue wissenschaftliche Erkenntnisse: Integration neuer Biomarker, genetischer Risikofaktoren oder detaillierterer neuronaler Korrelate."Real-World Evidence" (RWE): Nutzung aggregierter, anonymisierter Daten aus der breiteren Patientenversorgung zur Validierung unter realen Bedingungen.<sup><a href="#source-7">[7]</a>, <sup><a href="#source-19">[19]</a></sup></sup></span></li>
+                <li class="list-item-with-icon"><i class="fas fa-brain icon"></i><span>Adaptives Lernen: Die KI sollte so konzipiert sein, dass sie kontinuierlich aus neuen Daten lernt und ihre Modelle selbstständig aktualisiert.<sup><a href="#source-19">[19]</a></sup></span></li>
+            </ul>
+        </div>
+        <div class="grid-item items-start text-left lg:col-span-1">
+            <div class="section-heading-with-icon">
+                <i class="fas fa-microchip icon"></i>
+                <h3 class="mb-2">Technologische Perspektive:</h3>
+            </div>
+            <ul class="list-disc list-outside space-y-2 pl-6">
+                <li class="list-item-with-icon"><i class="fas fa-mobile-alt icon"></i><span>KI-Früherkennung &amp; Verlaufsüberwachung: Algorithmen detektieren subtile Veränderungen in Bewegungsmustern, Schlafrhythmus oder Kommunikationsgewohnheiten aus Smartphone-/Wearable-Daten.<sup><a href="#source-7">[7]</a></sup></span></li>
+                <li class="list-item-with-icon"><i class="fas fa-home icon"></i><span>Digitale Hilfsmittel &amp; Assistenzsysteme: Smarte Erinnerungs-/Orientierungshilfen (z.B. "Simon" App), assistive Geräte für Zuhause (z.B. "Florence Project"), vernetzte Smart-Home-Systeme (Sturzerkennung, Herdabschaltung).<sup><a href="#source-20">[20]</a></sup></span></li>
+                <li class="list-item-with-icon"><i class="fas fa-robot icon"></i><span>Robotik &amp; digitale Assistenten: Pflegeroboter (z.B. PARO-Robbenbaby zur emotionalen Unterstützung), soziale Roboter, Sprachassistenten (Alexa, Siri) für Erinnerungen, Unterhaltung. Chatbot-Systeme für kognitive Anregung und Angehörigen-Beratung (z.g. ADQueryAid).<sup><a href="#source-7">[7]</a>, <sup><a href="#source-20">[20]</a></sup></sup></span></li>
+                <li class="list-item-with-icon"><i class="fas fa-hands-helping icon"></i><span>Unterstützung für Pflegende: Digitale Plattformen, Matching-Systeme, KI-gestützte Chatbots, automatische Dokumentationstools.<sup><a href="#source-20">[20]</a></sup></span></li>
+                <li class="list-item-with-icon"><i class="fas fa-times-circle icon"></i><span>Risiken der Technologie-Nutzung: Datenschutzbedenken, Usability-Probleme, Gefahr einer sozialen Kluft durch Kosten, Ersetzung menschlichen Kontakts, und unzureichende Effektivität.<sup><a href="#source-20">[20]</a></sup></span></li>
+            </ul>
+        </div>
+      </div>
+        </section>
 
-                <h3 class="text-2xl font-semibold text-teal-600 mb-3">Nutzung neuer Daten aus der Praxis zur Optimierung:</h3>
-                <ul class="list-disc list-inside space-y-2 mb-6 text-sm text-stone-600">
-                    <li><strong>Langzeit-Patientenverläufe mit BCI:</strong> Kontinuierliche Sammlung von Daten (neuronale Aktivität, kognitive Testscores, Verhaltensbeobachtungen) zur Wirksamkeitsüberwachung und Anpassung der Stimulationsparameter.</li>
-                    <li><strong>Feedback von Ärzten und Betreuern:</strong> Klinisches Feedback zur beobachteten Verbesserung und zur Usability/Akzeptanz der BCI-Schnittstelle.</li>
-                    <li><strong>Neue wissenschaftliche Erkenntnisse:</strong> Integration neuer Biomarker, genetischer Risikofaktoren oder detaillierterer neuronaler Korrelate.</li>
-                    <li><strong>"Real-World Evidence" (RWE):</strong> Nutzung aggregierter, anonymisierter Daten aus der breiteren Patientenversorgung zur Validierung unter realen Bedingungen.</li>
-                    <li><strong>Adaptives Lernen:</strong> Die KI sollte so konzipiert sein, dass sie kontinuierlich aus neuen Daten lernt und ihre Modelle selbstständig aktualisiert.</li>
-                </ul>
+        <section id="implikationen" class="mb-20 py-12 px-6 md:px-12">
+            <h1 class="main-page-title">Soziale &amp; Wirtschaftliche Implikationen</h1>
+            <h2> <br>
+            Demenz hat weitreichende Auswirkungen auf Gesellschaft und Wirtschaft, die über die medizinische Versorgung hinausgehen.</h2>
+          <p>&nbsp;</p>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-7xl mx-auto">
+        <div class="grid-item items-start text-left">
+            <div class="section-heading-with-icon">
+                <i class="fas fa-users icon"></i>
+                <h3 class="mb-2">Gesellschaftliche Perspektive:</h3>
+            </div>
+            <ul class="list-disc list-outside space-y-2 pl-6">
+                <li class="list-item-with-icon"><i class="fas fa-family icon"></i><span>Belastung von Angehörigen: Großteil der Betreuung durch Familienangehörige (ca. 5 Stunden/Tag, 70% Frauen), führt zu emotionalem Stress, körperlicher Überlastung, sozialer Isolation und finanziellen Einbußen. Macht ca. 50% der Gesamtkosten von Demenz aus.<sup><a href="#source-2">[2]</a>, <sup><a href="#source-21">[21]</a></sup></sup></span></li>
+                <li class="list-item-with-icon"><i class="fas fa-hospital-user icon"></i><span>Pflegeinfrastruktur &amp; Versorgungslücke: Große weltweite Unterschiede, Mangel an Pflegeheimplätzen, Personalmangel, finanzielle Hürden in hochentwickelten Ländern. In Low- and Middle-Income Countries (LMIC) oft fast gänzlich fehlende spezialisierte Einrichtungen; über 70% der Betroffenen werden 2050 in diesen Ländern leben.<sup><a href="#source-1">[1]</a></sup></span></li>
+                <li class="list-item-with-icon"><i class="fas fa-mask icon"></i><span>Stigma: In vielen Kulturen haftet Demenz ein Stigma an, führt zu späten Diagnosen und mangelnder Hilfe. Sogar 1 von 3 Ärzten glaubt fälschlicherweise, Demenz sei ein normaler Alterungsprozess.<sup><a href="#source-2">[2]</a></sup></span></li>
+                <li class="list-item-with-icon"><i class="fas fa-handshake icon"></i><span>Chancen: Wachsendes öffentliches Bewusstsein, demenzfreundliche Gemeinschaften (z.B. Japan, Großbritannien), Unterstützungsprogramme für Angehörige, Abbau von Berührungsängsten (z.B. Jugendgruppen mit Patienten).<sup><a href="#source-22">[22]</a></sup></span></li>
+            </ul>
+        </div>
+        <div class="grid-item items-start text-left">
+            <div class="section-heading-with-icon">
+                <i class="fas fa-chart-pie icon"></i>
+                <h3 class="mb-2">Wirtschaftliche Perspektive:</h3>
+            </div>
+            <ul class="list-disc list-outside space-y-2 pl-6">
+                <li class="list-item-with-icon"><i class="fas fa-dollar-sign icon"></i><span>Kostenverteilung &amp; implizite Lasten: Informelle Pflege macht bis zu zwei Drittel der Gesamtkosten in Niedrigeinkommensländern aus. Führt zu entgangener Arbeitsproduktivität und gesundheitlichen Folgen für Pflegende.<sup><a href="#source-2">[2]</a></sup></span></li>
+                <li class="list-item-with-icon"><i class="fas fa-money-check-alt icon"></i><span>Neue Therapien – Fluch oder Segen für die Kassen? Bieten Chance zur Kostenersparnis bei verzögerter Progression, aber extrem hohe Therapiekosten (z.B. Lecanemab 26.000 US$/Patient/Jahr) könnten Gesundheitssysteme belasten. Risiko ungleichen Zugangs.<sup><a href="#source-4">[4]</a></sup></span></li>
+                <li class="list-item-with-icon"><i class="fas fa-industry icon"></i><span>Volkswirtschaftliche Chancen: Wachsender Markt für Demenzprävention, -diagnostik und -versorgung stimuliert Innovation ("Silver Economy"). Investitionen in Prävention sind langfristig kosteneffizient.<sup><a href="#source-23">[23]</a></sup></span></li>
+            </ul>
+        </div>
+      </div>
+        </section>
 
-                <h3 class="text-2xl font-semibold text-teal-600 mb-3">Technologische Perspektive (aus PDF):</h3>
-                <ul class="list-disc list-inside space-y-2 text-sm text-stone-600">
-                    <li><strong>KI-Früherkennung & Verlaufsüberwachung:</strong> Algorithmen detektieren subtile Veränderungen in Bewegungsmustern, Schlafrhythmus oder Kommunikationsgewohnheiten aus Smartphone-/Wearable-Daten.</li>
-                    <li><strong>Digitale Hilfsmittel & Assistenzsysteme:</strong> Smarte Erinnerungs-/Orientierungshilfen (z.B. "Simon" App), assistive Geräte für Zuhause (z.B. "Florence Project"), vernetzte Smart-Home-Systeme (Sturzerkennung, Herdabschaltung).</li>
-                    <li><strong>Robotik & digitale Assistenten:</strong> Pflegeroboter (z.B. PARO-Robbenbaby zur emotionalen Unterstützung), soziale Roboter, Sprachassistenten (Alexa, Siri) für Erinnerungen, Unterhaltung. Chatbot-Systeme für kognitive Anregung und Angehörigen-Beratung (z.B. ADQueryAid).</li>
-                    <li><strong>Unterstützung für Pflegende:</strong> Digitale Plattformen, Matching-Systeme, KI-gestützte Chatbots, automatische Dokumentationstools.</li>
-                    <li><strong>Risiken der Technologie-Nutzung:</strong> Datenschutzbedenken, Usability-Probleme, Gefahr einer sozialen Kluft durch Kosten, Ersetzung menschlichen Kontakts, und unzureichende Effektivität.</li>
-                </ul>
+        <section id="politik" class="mb-20 py-12 px-6 md:px-12 bg-purple-900 bg-opacity-50">
+            <h1 class="main-page-title">Politische Perspektive &amp; Ganzheitlicher Ansatz</h1>
+            <h2> <br>
+            Regierungen und internationale Gemeinschaften spielen eine Schlüsselrolle bei der Bewältigung der Demenzherausforderung.</h2>
+          <p>&nbsp;</p>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-7xl mx-auto">
+        <div class="grid-item items-start text-left">
+            <div class="section-heading-with-icon">
+                <i class="fas fa-landmark icon"></i>
+                <h3 class="mb-2">Nationale Demenzpläne:</h3>
+            </div>
+            <ul class="list-disc list-outside space-y-2 pl-6">
+                <li class="list-item-with-icon"><i class="fas fa-map-marked-alt icon"></i><span>Laut WHO hatten 2021 nur etwa ein Viertel aller Länder (32 von 194 Staaten) eine nationale Demenzstrategie oder einen Aktionsplan.<sup><a href="#source-1">[1]</a></sup></span></li>
+                <li class="list-item-with-icon"><i class="fas fa-bullseye icon"></i><span>Ziele des WHO Globalen Aktionsplans Demenz 2017-2025 (75% der Länder mit Strategie bis 2025) werden verfehlt; Verlängerung bis 2031 empfohlen.<sup><a href="#source-1">[1]</a></sup></span></li>
+                <li class="list-item-with-icon"><i class="fas fa-frown-open icon"></i><span>Risiko politischer Trägheit könnte fatale Folgen haben: Unvorbereitete Staaten könnten von der Zunahme an Pflegebedürftigen überrollt werden.<sup><a href="#source-1">[1]</a></sup></span></li>
+            </ul>
+        </div>
+        <div class="grid-item items-start text-left">
+            <div class="section-heading-with-icon">
+                <i class="fas fa-handshake icon"></i>
+                <h3 class="mb-2">Chancen &amp; Internationale Kooperation:</h3>
+            </div>
+            <ul class="list-disc list-outside space-y-2 pl-6">
+                <li class="list-item-with-icon"><i class="fas fa-globe icon"></i><span>Demenz rückt international stärker ins Blickfeld.</span></li>
+                <li class="list-item-with-icon"><i class="fas fa-users-cog icon"></i><span>Weltgesundheitsversammlung verabschiedete 2017 den Demenz-Aktionsplan.<sup><a href="#source-1">[1]</a></sup></span></li>
+                <li class="list-item-with-icon"><i class="fas fa-building icon"></i><span>Organisationen wie WHO und Alzheimer's Disease International (ADI) unterstützen Länder mit Beratung und Plattformen.<sup><a href="#source-1">[1]</a>, <sup><a href="#source-2">[2]</a></sup></sup></span></li>
+                <li class="list-item-with-icon"><i class="fas fa-people-carry-box icon"></i><span>Länderübergreifende Forschungskooperationen (z.B. EU-geförderte JPND-Initiative).<sup><a href="#source-24">[24]</a></sup></span></li>
+                <li class="list-item-with-icon"><i class="fas fa-heart icon"></i><span>Wachsendes Engagement der Zivilgesellschaft treibt Politik voran (z.B. Welt-Alzheimer Woche).<sup><a href="#source-2">[2]</a></sup></span></li>
+            </ul>
+        </div>
+        <div class="grid-item items-start text-left lg:col-span-2">
+            <div class="section-heading-with-icon">
+                <i class="fas fa-gavel icon"></i>
+                <h3 class="mb-2">Maßnahmenbündel für Regierungen:</h3>
+            </div>
+            <ul class="list-disc list-outside space-y-2 pl-6">
+                <li class="list-item-with-icon"><i class="fas fa-hospital-alt icon"></i><span>Pflege- und Gesundheitssystem stärken: Ausbau geriatrischer Versorgungsstrukturen, mehr spezialisiertes Personal, faire Finanzierung.<sup><a href="#source-1">[1]</a></sup></span></li>
+                <li class="list-item-with-icon"><i class="fas fa-hands-heart icon"></i><span>Unterstützung für Familien: Pflegegelder, Rentenansprüche, familiengerechte Arbeitszeiten.<sup><a href="#source-1">[1]</a></sup></span></li>
+                <li class="list-item-with-icon"><i class="fas fa-hand-holding-medical icon"></i><span>Präventionspolitik: Stärkung der Bildung, Kampagnen gegen Risikofaktoren, altersfreundliche Städte.<sup><a href="#source-1">[1]</a></sup></span></li>
+                <li class="list-item-with-icon"><i class="fas fa-microscope icon"></i><span>Forschung fördern: Erhöhung staatlicher Mittel (z.B. USA mit über 3 Mrd. US$/Jahr für Alzheimer-Forschung über NIH).<sup><a href="#source-7">[7]</a></sup> Teilen von Erkenntnissen.</span></li>
+                <li class="list-item-with-icon"><i class="fas fa-balance-scale-right icon"></i><span>Gesellschaftliche Aufklärung &amp; Rechte: Schutz der Rechte von Demenzkranken durch Gesetze und Kampagnen.<sup><a href="#source-1">[1]</a></sup></span></li>
+            </ul>
+        </div>
+      </div>
+        </section>
+
+        <section id="fazit" class="mb-20 py-12 px-6 md:px-12 relative overflow-hidden">
+            <img src="bilder/_2GWNVyxsDjfuzrUd_IkS.jpg" alt="Fazit Mobile" class="mobile-image-band md:hidden">
+
+            <div class="relative z-10 flex flex-col md:flex-row items-start gap-8">
+                <div class="md:w-1/3 w-full h-screen flex-shrink-0 order-first desktop-image-container">
+                  <img src="bilder/_2GWNVyxsDjfuzrUd_IkS.jpg" alt="Fazit Desktop" class="w-full h-full object-cover rounded-lg shadow-md">
+                </div>
+
+                <div class="md:w-2/3 w-full">
+                    <div class="text-center md:text-left mb-12">
+                        <h1 class="main-page-title">Fazit &amp; Der Weg nach vorn</h1>
+                        <h2>
+                          <br>
+                        Die Analyse zeigt, dass Demenz und Alzheimer multidimensionale Herausforderungen darstellen, die nur durch ein ebenso vielseitiges Herangehen gemeistert werden können. </h2>
+                    </div>
+
+                    <div class="mb-12">
+                        <h1 class="fa-3x">Zusammenfassende Erkenntnisse:</h1>
+                      <p>&nbsp;</p>
+<div class="numbered-list-item">
+              <div class="number-circle">1</div>
+                            <p>Medizinisch: Hoffnung durch neue Therapien, Prävention und Diagnostik, aber Wirksamkeit und Zugänglichkeit bleiben begrenzt.</p>
+                        </div>
+                        <div class="numbered-list-item">
+                            <div class="number-circle">2</div>
+                            <p>Gesellschaftlich: Welt muss ältere Bevölkerung würdig versorgen, ohne Überlastung von Familien und Systemen.</p>
+                        </div>
+                        <div class="numbered-list-item">
+                            <div class="number-circle">3</div>
+                            <p>Technologisch: Erhebliche Chancen durch KI (Früherkennung) und Assistenzsysteme, erfordert aber Vorsicht bei Datenschutz und Implementierung.</p>
+                        </div>
+                        <div class="numbered-list-item">
+                            <div class="number-circle">4</div>
+                            <p>Wirtschaftlich: Kostenexplosion durch Demenz droht; Investitionen in Prävention, Forschung und Pflege sind ökonomisch sinnvoll.</p>
+                        </div>
+                        <div class="numbered-list-item">
+                            <div class="number-circle">5</div>
+                            <p>Politisch: Regierungen müssen Demenz zur Priorität machen; nationale Strategien und internationale Kooperation sind unerlässlich.</p>
+                        </div>
+                    </div>
+
+                    <div class="mb-12">
+                        <h2 class="fa-3x">Hoffnung &amp; Ausblick:</h2>
+                        <p>&nbsp;</p>
+<div class="numbered-list-item">
+              <div class="number-circle">1</div>
+                            <p>Das Thema Demenz erfährt weltweit so viel Aufmerksamkeit wie nie zuvor.</p>
+                        </div>
+                        <div class="numbered-list-item">
+                            <div class="number-circle">2</div>
+                            <p>Forschungsfortschritte und zivilgesellschaftliches Engagement bringen das Thema aus dem Schatten.</p>
+                        </div>
+                        <div class="numbered-list-item">
+                            <div class="number-circle">3</div>
+                            <p>Ein Durchbruch (wirksames Medikament, Impfstoff, neues Pflegeparadigma) könnte das Blatt wenden und Millionen Menschen ein besseres Altern ermöglichen.</p>
+                        </div>
+                        <div class="numbered-list-item">
+                            <div class="number-circle">4</div>
+                            <p>Der Weg nach vorn: Jetzt entschlossen und global koordiniert handeln, um die Chancen zu realisieren und die Risiken (steigende Fallzahlen, Versorgungslücken) einzudämmen.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <section id="soziale-wirtschaftliche-implikationen" class="content-section mb-16">
-            <div class="bg-white p-8 rounded-xl shadow-lg">
-                <h2 class="text-3xl font-bold text-teal-700 mb-4">Soziale & Wirtschaftliche Implikationen</h2>
-                <p class="text-stone-700 mb-6">Demenz hat weitreichende Auswirkungen auf Gesellschaft und Wirtschaft, die über die medizinische Versorgung hinausgehen.</p>
-
-                <h3 class="text-2xl font-semibold text-teal-600 mb-3">Gesellschaftliche Perspektive:</h3>
-                <ul class="list-disc list-inside space-y-2 mb-6 text-sm text-stone-600">
-                    <li><strong>Belastung von Angehörigen:</strong> Großteil der Betreuung durch Familienangehörige (ca. 5 Stunden/Tag, 70% Frauen), führt zu emotionalem Stress, körperlicher Überlastung, sozialer Isolation und finanziellen Einbußen. Macht ca. 50% der Gesamtkosten von Demenz aus.</li>
-                    <li><strong>Pflegeinfrastruktur & Versorgungslücke:</strong> Große weltweite Unterschiede, Mangel an Pflegeheimplätzen, Personalmangel, finanzielle Hürden in hochentwickelten Ländern. In Low- and Middle-Income Countries (LMIC) oft fast gänzlich fehlende spezialisierte Einrichtungen; über 70% der Betroffenen werden 2050 in diesen Ländern leben.</li>
-                    <li><strong>Stigma:</strong> In vielen Kulturen haftet Demenz ein Stigma an, führt zu späten Diagnosen und mangelnder Hilfe. Sogar 1 von 3 Ärzten glaubt fälschlicherweise, Demenz sei ein normaler Alterungsprozess.</li>
-                    <li><strong>Chancen:</strong> Wachsendes öffentliches Bewusstsein, demenzfreundliche Gemeinschaften (z.B. Japan, Großbritannien), Unterstützungsprogramme für Angehörige, Abbau von Berührungsängsten (z.B. Jugendgruppen mit Patienten).</li>
-                </ul>
-
-                <h3 class="text-2xl font-semibold text-teal-600 mb-3">Wirtschaftliche Perspektive:</h3>
-                <ul class="list-disc list-inside space-y-2 text-sm text-stone-600">
-                    <li><strong>Kostenverteilung & implizite Lasten:</strong> Informelle Pflege macht bis zu zwei Drittel der Gesamtkosten in Niedrigeinkommensländern aus. Führt zu entgangener Arbeitsproduktivität und gesundheitlichen Folgen für Pflegende.</li>
-                    <li><strong>Neue Therapien – Fluch oder Segen für die Kassen?</strong> Bieten Chance zur Kostenersparnis bei verzögerter Progression, aber extrem hohe Therapiekosten (z.B. Lecanemab 26.000 US$/Patient/Jahr) könnten Gesundheitssysteme belasten. Risiko ungleichen Zugangs.</li>
-                    <li><strong>Volkswirtschaftliche Chancen:</strong> Wachsender Markt für Demenzprävention, -diagnostik und -versorgung stimuliert Innovation ("Silver Economy"). Investitionen in Prävention sind langfristig kosteneffizient.</li>
-                </ul>
-            </div>
+        <section class="mb-16 py-12 px-6 md:px-12 text-center">
+            <h1 class="main-page-title">Abschließende Botschaft:</h1>
+          <p class="text-xl font-medium leading-relaxed"><br>
+          </p>
+            <p class="text-xl font-medium leading-relaxed"> Demenz und Alzheimer verlangen einen langen Atem von Medizin, Gesellschaft, Technologie, Wirtschaft und Politik gleichermaßen. Nur mit gemeinsamer Anstrengung kann die Welt diese Herausforderung bewältigen und dafür sorgen, dass Menschen mit Demenz überall würdig leben und betreut werden. </p>
         </section>
 
-        <section id="politische-perspektive" class="content-section mb-16">
-            <div class="bg-white p-8 rounded-xl shadow-lg">
-                <h2 class="text-3xl font-bold text-teal-700 mb-4">Politische Perspektive & Ganzheitlicher Ansatz</h2>
-                <p class="text-stone-700 mb-6">Regierungen und internationale Gemeinschaften spielen eine Schlüsselrolle bei der Bewältigung der Demenzherausforderung.</p>
-
-                <h3 class="text-2xl font-semibold text-teal-600 mb-3">Nationale Demenzpläne:</h3>
-                <ul class="list-disc list-inside space-y-2 mb-6 text-sm text-stone-600">
-                    <li>Laut WHO hatten 2021 nur etwa ein Viertel aller Länder (32 von 194 Staaten) eine nationale Demenzstrategie oder einen Aktionsplan.</li>
-                    <li>Ziele des WHO Globalen Aktionsplans Demenz 2017-2025 (75% der Länder mit Strategie bis 2025) werden verfehlt; Verlängerung bis 2031 empfohlen.</li>
-                    <li>Risiko politischer Trägheit könnte fatale Folgen haben: Unvorbereitete Staaten könnten von der Zunahme an Pflegebedürftigen überrollt werden.</li>
-                </ul>
-
-                <h3 class="text-2xl font-semibold text-teal-600 mb-3">Chancen & Internationale Kooperation:</h3>
-                <ul class="list-disc list-inside space-y-2 mb-6 text-sm text-stone-600">
-                    <li>Demenz rückt international stärker ins Blickfeld.</li>
-                    <li>Weltgesundheitsversammlung verabschiedete 2017 den Demenz-Aktionsplan.</li>
-                    <li>Organisationen wie WHO und Alzheimer's Disease International (ADI) unterstützen Länder mit Beratung und Plattformen.</li>
-                    <li>Länderübergreifende Forschungskooperationen (z.B. EU-geförderte JPND-Initiative).</li>
-                    <li>Wachsendes Engagement der Zivilgesellschaft treibt Politik voran (z.B. Welt-Alzheimer Woche).</li>
-                </ul>
-
-                <h3 class="text-2xl font-semibold text-teal-600 mb-3">Maßnahmenbündel für Regierungen:</h3>
-                <ul class="list-disc list-inside space-y-2 text-sm text-stone-600">
-                    <li><strong>Pflege- und Gesundheitssystem stärken:</strong> Ausbau geriatrischer Versorgungsstrukturen, mehr spezialisiertes Personal, faire Finanzierung.</li>
-                    <li><strong>Unterstützung für Familien:</strong> Pflegegelder, Rentenansprüche, familiengerechte Arbeitszeiten.</li>
-                    <li><strong>Präventionspolitik:</strong> Stärkung der Bildung, Kampagnen gegen Risikofaktoren, altersfreundliche Städte.</li>
-                    <li><strong>Forschung fördern:</strong> Erhöhung staatlicher Mittel (z.B. USA mit über 3 Mrd. US$/Jahr für Alzheimer-Forschung über NIH), Teilen von Erkenntnissen.</li>
-                    <li><strong>Gesellschaftliche Aufklärung & Rechte:</strong> Schutz der Rechte von Demenzkranken durch Gesetze und Kampagnen.</li>
-                </ul>
-            </div>
+        <section id="quellenangaben" class="mb-20 py-12 px-6 md:px-12 bg-purple-900 bg-opacity-50">
+            <h1 class="main-page-title">Quellenangaben</h1>
+            <p>&nbsp;</p>
+<div class="max-w-4xl mx-auto text-left">
+        <ol class="list-decimal list-outside space-y-3 pl-6">
+            <li id="source-1"><p><a href="https://www.who.int/news-room/fact-sheets/detail/dementia" target="_blank" class="hover:underline">World Health Organization (WHO). Dementia. (2021).</a></p></li>
+            <li id="source-2"><p><a href="https://www.alzint.org/resource/world-alzheimer-report-2019/" target="_blank" class="hover:underline">Alzheimer's Disease International (ADI). World Alzheimer Report 2019: Attitudes to dementia. (2019).</a></p></li>
+            <li id="source-3"><p><a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(20)30367-6/fulltext" target="_blank" class="hover:underline">Livingston, G., et al. Dementia prevention, intervention, and care: 2020 report of the Lancet Commission. The Lancet, 396(10248), 413-446. (2020).</a></p></li>
+            <li id="source-4"><p><a href="https://www.fda.gov/news-events/press-announcements/fda-approves-first-blood-test-aid-diagnosis-alzheimers-disease" target="_blank" class="hover:underline">US Food and Drug Administration (FDA). FDA approves first blood test to aid in the diagnosis of Alzheimer’s disease. (2025, May).</a></p></li>
+            <li id="source-5"><p><a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(15)61254-X/fulltext" target="_blank" class="hover:underline">FINGER Study Group. A 2-year multidomain intervention of diet, exercise, cognitive training, and vascular risk monitoring versus control to prevent cognitive decline in at-risk elderly people (FINGER): a randomised controlled trial. The Lancet, 385(9984), 2255-2263. (2015).</a></p></li>
+            <li id="source-6"><p><a href="https://neuralink.com/" target="_blank" class="hover:underline">Neuralink. Offizielle Website und Publikationen. (Aktueller Stand).</a></p></li>
+            <li id="source-7"><p><a href="https://www.nature.com/articles/s41586-023-06662-z" target="_blank" class="hover:underline">Nature. AI for early detection of Alzheimer's disease. (2023).</a></p></li>
+            <li id="source-8"><p><a href="https://www.alz.org/alzheimers-dementia/what-is-alzheimers/types-of-dementia" target="_blank" class="hover:underline">Alzheimer's Association. Types of Dementia. (Aktueller Stand).</a></p></li>
+            <li id="source-9"><p><a href="https://www.alz.org/alzheimers-dementia/stages-of-alzheimers" target="_blank" class="hover:underline">Alzheimer's Association. Stages of Alzheimer's. (Aktueller Stand).</a></p></li>
+            <li id="source-10"><p><a href="https://www.alzforum.org/therapeutics/tau-immunotherapy" target="_blank" class="hover:underline">AlzForum. Tau Immunotherapy. (Aktueller Stand).</a></p></li>
+            <li id="source-11"><p><a href="https://www.nia.nih.gov/health/alzheimers-disease-diagnosis/how-alzheimers-disease-diagnosed" target="_blank" class="hover:underline">National Institute on Aging (NIA). How Is Alzheimer's Disease Diagnosed? (Aktueller Stand).</a></p></li>
+            <li id="source-12"><p><a href="https://www.alz.org/media/Documents/alzheimers-facts-and-figures.pdf" target="_blank" class="hover:underline">Alzheimer's Association. 2024 Alzheimer's Disease Facts and Figures. (2024).</a></p></li>
+            <li id="source-13"><p><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7326260/" target="_blank" class="hover:underline">NCBI. The Role of Big Data in Alzheimer's Disease Research. (2020).</a></p></li>
+            <li id="source-14"><p><a href="https://gdpr-info.eu/" target="_blank" class="hover:underline">General Data Protection Regulation (GDPR) Official Website. (Aktueller Stand).</a></p></li>
+            <li id="source-15"><p><a href="https://www.nature.com/articles/s41593-021-00832-6" target="_blank" class="hover:underline">Nature Neuroscience. Ethical challenges of brain-computer interfaces. (2021).</a></p></li>
+            <li id="source-16"><p><a href="https://www.ibm.com/cloud/learn/machine-learning-types" target="_blank" class="hover:underline">IBM. Types of Machine Learning. (Aktueller Stand).</a></p></li>
+            <li id="source-17"><p><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8186259/" target="_blank" class="hover:underline">NCBI. Federated Learning in Healthcare: A Survey. (2021).</a></p></li>
+            <li id="source-18"><p><a href="https://www.nature.com/articles/s41598-020-65975-2" target="_blank" class="hover:underline">Nature. Data quality in machine learning. (2020).</a></p></li>
+            <li id="source-19"><p><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8978018/" target="_blank" class="hover:underline">NCBI. Adaptive Brain-Computer Interfaces. (2022).</a></p></li>
+            <li id="source-20"><p><a href="https://www.who.int/news-room/fact-sheets/detail/dementia" target="_blank" class="hover:underline">WHO. Dementia: Digital health and AI. (2021).</a></p></li>
+            <li id="source-21"><p><a href="https://www.caregiver.org/caregiver-statistics-work-and-caregiving" target="_blank" class="hover:underline">Caregiver.org. Caregiver Statistics: Work and Caregiving. (Aktueller Stand).</a></p></li>
+            <li id="source-22"><p><a href="https://www.alz.org/help-support/community/dementia-friendly-america" target="_blank" class="hover:underline">Alzheimer's Association. Dementia Friendly America. (Aktueller Stand).</a></p></li>
+            <li id="source-23"><p><a href="https://www.mckinsey.com/industries/healthcare-systems-and-services/our-insights/the-silver-economy-opportunity" target="_blank" class="hover:underline">McKinsey &amp; Company. The silver economy: Opportunity or challenge? (2023).</a></p></li>
+            <li id="source-24"><p><a href="https://www.jpnd.eu/" target="_blank" class="hover:underline">JPND. EU Joint Programme – Neurodegenerative Disease Research. (Aktueller Stand).</a></p></li>
+        </ol>
+      </div>
         </section>
 
-        <section id="fazit" class="content-section mb-16">
-            <div class="bg-white p-8 rounded-xl shadow-lg">
-                <h2 class="text-3xl font-bold text-teal-700 mb-4">Fazit & Der Weg nach vorn</h2>
-                <p class="text-stone-700 mb-6">Die Analyse zeigt, dass Demenz und Alzheimer multidimensionale Herausforderungen darstellen, die nur durch ein ebenso vielseitiges Herangehen gemeistert werden können.</p>
-
-                <h3 class="text-2xl font-semibold text-teal-600 mb-3">Zusammenfassende Erkenntnisse:</h3>
-                <ul class="list-disc list-inside space-y-2 mb-6 text-stone-700">
-                    <li><strong>Medizinisch:</strong> Hoffnung durch neue Therapien, Prävention und Diagnostik, aber Wirksamkeit und Zugänglichkeit bleiben begrenzt.</li>
-                    <li><strong>Gesellschaftlich:</strong> Welt muss ältere Bevölkerung würdig versorgen, ohne Überlastung von Familien und Systemen.</li>
-                    <li><strong>Technologisch:</strong> Erhebliche Chancen durch KI (Früherkennung) und Assistenzsysteme, erfordert aber Vorsicht bei Datenschutz und Implementierung.</li>
-                    <li><strong>Wirtschaftlich:</strong> Kostenexplosion durch Demenz droht; Investitionen in Prävention, Forschung und Pflege sind ökonomisch sinnvoll.</li>
-                    <li><strong>Politisch:</strong> Regierungen müssen Demenz zur Priorität machen; nationale Strategien und internationale Kooperation sind unerlässlich.</li>
-                </ul>
-
-                <h3 class="text-2xl font-semibold text-teal-600 mb-3">Hoffnung & Ausblick:</h3>
-                <ul class="list-disc list-inside space-y-2 mb-6 text-stone-700">
-                    <li>Das Thema Demenz erfährt weltweit so viel Aufmerksamkeit wie nie zuvor.</li>
-                    <li>Forschungsfortschritte und zivilgesellschaftliches Engagement bringen das Thema aus dem Schatten.</li>
-                    <li>Ein Durchbruch (wirksames Medikament, Impfstoff, neues Pflegeparadigma) könnte das Blatt wenden und Millionen Menschen ein besseres Altern ermöglichen.</li>
-                    <li><strong>Der Weg nach vorn:</strong> Jetzt entschlossen und global koordiniert handeln, um die Chancen zu realisieren und die Risiken (steigende Fallzahlen, Versorgungslücken) einzudämmen.</li>
-                </ul>
-
-                <h3 class="text-2xl font-semibold text-teal-600 mb-3">Abschließende Botschaft:</h3>
-                <p class="text-lg text-stone-700">
-                    Demenz und Alzheimer verlangen einen langen Atem von Medizin, Gesellschaft, Technologie, Wirtschaft und Politik gleichermaßen. Nur mit gemeinsamer Anstrengung kann die Welt diese Herausforderung bewältigen und dafür sorgen, dass Menschen mit Demenz überall würdig leben und betreut werden.
-                </p>
-            </div>
-        </section>
     </main>
 
-    <footer class="bg-stone-800 text-stone-300 text-center p-6 mt-12">
-        <p>&copy; 2025 Präsentation: KI bei Alzheimer & Demenz mit BCI. Alle Rechte vorbehalten.</p>
-    </footer>
+    <footer class="bg-gradient-to-r from-purple-900 to-indigo-900 text-white text-center py-6 px-4 mt-auto rounded-t-xl">
+      <p>&copy; <span id="current-year"></span> KI &amp; Demenz Informationsportal. Alle Rechte vorbehalten.</p>
+</footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Accordion functionality
-            const accordionHeaders = document.querySelectorAll('.accordion-header');
-            accordionHeaders.forEach(header => {
-                header.addEventListener('click', () => {
-                    const accordionContent = header.nextElementSibling;
-                    const arrow = header.querySelector('span:last-child');
-
-                    if (accordionContent.classList.contains('open')) {
-                        accordionContent.classList.remove('open');
-                        arrow.style.transform = 'rotate(0deg)';
-                    } else {
-                        accordionContent.classList.add('open');
-                        arrow.style.transform = 'rotate(180deg)';
-                    }
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
                 });
+                // Close mobile menu after clicking a link
+                const mobileMenu = document.getElementById('mobile-menu');
+                if (mobileMenu.classList.contains('active')) {
+                    mobileMenu.classList.remove('active');
+                }
             });
+        });
 
-            // Smooth scroll and active nav link
-            const navLinks = document.querySelectorAll('.nav-link');
-            const sections = document.querySelectorAll('.content-section');
+        // Dynamic footer year
+        document.getElementById('current-year').textContent = new Date().getFullYear();
 
-            navLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const targetId = this.getAttribute('href').substring(1);
-                    const targetSection = document.getElementById(targetId);
-                    if (targetSection) {
-                        targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
-                });
-            });
-            
-            function updateActiveNavLink() {
-                let currentSectionId = '';
-                sections.forEach(section => {
-                    const sectionTop = section.offsetTop - 100;
-                    const sectionBottom = sectionTop + section.offsetHeight;
-                    if (window.scrollY >= sectionTop && window.scrollY < sectionBottom) {
-                        currentSectionId = section.getAttribute('id');
-                    }
-                });
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
 
-                navLinks.forEach(link => {
-                    link.classList.remove('active-nav-link');
-                    if (link.getAttribute('href') === `#${currentSectionId}`) {
-                        link.classList.add('active-nav-link');
-                    }
-                });
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking outside (optional, but good for UX)
+        document.addEventListener('click', (event) => {
+            const isClickInsideMenu = mobileMenu.contains(event.target) || mobileMenuButton.contains(event.target);
+            if (!isClickInsideMenu && mobileMenu.classList.contains('active')) {
+                mobileMenu.classList.remove('active');
             }
-
-            window.addEventListener('scroll', updateActiveNavLink);
-            updateActiveNavLink();
         });
     </script>
-
 </body>
 </html>
